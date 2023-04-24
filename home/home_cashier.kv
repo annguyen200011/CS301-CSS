@@ -1,0 +1,172 @@
+<HomeCashierWindow>
+    id: home_admin_win
+    operation: 'vertical'
+    canvas.before:
+        Color:
+            rgba: (1,1,1,1)
+        Rectangle:
+            size: self.size
+            pos: self.pos
+
+    BoxLayout:
+        size: root.width, root.height
+        orientation: 'vertical'
+        spacing: 3
+
+        Label:
+            id: label_bar
+            size_hint: None, None
+            size: 1280, 104
+            canvas.before:
+                Color:
+                    rgba: (0.7294117647058823, 0.8431372549019608, 0.9137254901960784, 1)
+                Rectangle:
+                    size: self.size
+                    pos: self.pos
+            text: "Checkout Counter"
+            text_size: 1280 - 31, self.height
+            valign: 'center'
+            halign: 'left'
+            font_size: 45
+            color: (43/255,52/255,103/255,1)
+            font_family: "Lexend"
+    
+        BoxLayout:
+            orientation: 'horizontal'
+            size_hint: None, None
+            size: 1280, root.height - label_bar.height
+
+            BoxLayout:
+                id: left_box
+                orientation: 'vertical'
+                size_hint: None, 1
+                width: 320
+                spacing: 3
+
+                BoxLayout:
+                    orientation: 'horizontal'
+                    size_hint: 1, None
+                    height: 64
+
+                    Button:
+                        background_color: (0.7294117647058823, 0.8431372549019608, 0.9137254901960784, 1)
+                        background_normal: ''
+                        size_hint: 0.8, 1
+                        text: 'Transaction'
+                        color: 43/255, 52/255, 103/255, 1
+                        font_family: "Lexend"
+                        text_size: self.width - 38, self.height
+                        valign: 'center'
+                        font_size: 22
+
+                    Button:
+                        background_color: (0.7294117647058823, 0.8431372549019608, 0.9137254901960784, 1)
+                        background_normal: ''
+                        size_hint: 0.2, 1
+                        text: '>'
+                        color: 43/255, 52/255, 103/255, 1
+                        font_family: "Lexend"
+                        font_size: 20
+                        valign: 'center'
+
+                BoxLayout:
+                    orientation: 'horizontal'
+                    size_hint: 1, None
+                    height: 64
+
+                    Button:
+                        background_color: (0.7294117647058823, 0.8431372549019608, 0.9137254901960784, 1)
+                        background_normal: ''
+                        size_hint: 0.8, 1
+                        text: 'Inventory'
+                        color: 43/255, 52/255, 103/255, 1
+                        font_family: "Lexend"
+                        text_size: self.width - 38, self.height
+                        valign: 'center'
+                        font_size: 22
+                        
+                    Button:
+                        background_color: (0.7294117647058823, 0.8431372549019608, 0.9137254901960784, 1)
+                        background_normal: ''
+                        size_hint: 0.2, 1
+                        text: '>'
+                        color: 43/255, 52/255, 103/255, 1
+                        font_family: "Lexend"
+                        font_size: 20
+                        valign: 'center'
+
+                BoxLayout:
+                    orientation: 'horizontal'
+                    size_hint: 1, None
+                    height: 64
+
+                    Button:
+                        background_color: (0.7294117647058823, 0.8431372549019608, 0.9137254901960784, 1)
+                        background_normal: ''
+                        size_hint: 0.8, 1
+                        text: 'Employee'
+                        color: 43/255, 52/255, 103/255, 1
+                        font_family: "Lexend"
+                        text_size: self.width - 38, self.height
+                        valign: 'center'
+                        font_size: 22
+                        disabled: True
+                        
+                    Button:
+                        background_color: (0.7294117647058823, 0.8431372549019608, 0.9137254901960784, 1)
+                        background_normal: ''
+                        size_hint: 0.2, 1
+                        text: '>'
+                        color: 43/255, 52/255, 103/255, 1
+                        font_family: "Lexend"
+                        font_size: 20
+                        valign: 'center'
+                        disabled: True
+
+                BoxLayout:
+                    orientation: 'horizontal'
+                    size_hint: 1, None
+                    height: 64
+
+                    Button:
+                        background_color: (0.7294117647058823, 0.8431372549019608, 0.9137254901960784, 1)
+                        background_normal: ''
+                        size_hint: 0.8, 1
+                        text: 'Report'
+                        color: 43/255, 52/255, 103/255, 1
+                        font_family: "Lexend"
+                        text_size: self.width - 38, self.height
+                        valign: 'center'
+                        font_size: 22
+                        disabled: True
+                        
+                    Button:
+                        background_color: (0.7294117647058823, 0.8431372549019608, 0.9137254901960784, 1)
+                        background_normal: ''
+                        size_hint: 0.2, 1
+                        text: '>'
+                        color: 43/255, 52/255, 103/255, 1
+                        font_family: "Lexend"
+                        font_size: 20
+                        valign: 'center'
+                        disabled: True
+
+                Label:
+                    size_hint: 1, None
+                    height: left_box.height - 64*4 - 3*4
+                    canvas.before:
+                        Color:
+                            rgba: (0.7294117647058823, 0.8431372549019608, 0.9137254901960784, 1)
+                        Rectangle:
+                            size: self.size
+                            pos: self.pos
+
+            Label:
+                size: 960, self.height
+                size_hint: None, 1
+                text:'Welcome back, Lala'
+                text_size: self.width - 31,  self.height - 10
+                valign: 'top'
+                halign: 'left'
+                color: 0,0,0,1
+                font_size: 24
