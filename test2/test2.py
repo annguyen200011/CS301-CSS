@@ -15,12 +15,10 @@ import sqlite3
 Builder.load_file('test2.kv')
 Window.size = (1280,832)
 
-
 class InventoryScreen(Screen):
-    screen_manager = ObjectProperty(None)
+    data_tables = None
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        
         button_box = MDBoxLayout(
             pos_hint={"center_x": 0.8, "center_y": 0.9},
             adaptive_size=True,
@@ -35,42 +33,30 @@ class InventoryScreen(Screen):
                 )
             )
 
-        self.screen_manager = ScreenManager()
         # Add the inventory screen
-        table_screen = TableItemsScreen(name="table")
-        self.screen_manager.add_widget(table_screen)
+        
 
-        # Add the transaction screen
-        update_screen = UpdateItemScreen(name="update")
-        self.screen_manager.add_widget(update_screen)
+        # Connect sqlite3
+        #create database or connect to one
+        conn = sqlite3.connect('inventory_db.db')
 
-        self.add_widget(button_box)
-        self.add_widget(self.screen_manager)
-    
-    def on_button_press(self, instance_button: MDRaisedButton) -> None:
-        '''Called when a control button is clicked.'''
+        # crate a cursor
+        c = conn.cursor()
 
-        try:
-            {
-                "Update": self.show_update_screen,
+        # Create a table
+        c.execute("""CREATE TABLE if not exists item (
+            category text,
+            product_name text,
+            quantity_left integer,
+            unit_price real,
+            status text)
+            """)
+        c.execute("SELECT * FROM item")
+        items = c.fetchall()
+        
+        conn.commit()
+        conn.close()
 
-            }[instance_button.text]()
-        except KeyError:
-            pass
-
-    def show_table_screen(self):
-        self.screen_manager.transition.direction = "right"
-        self.screen_manager.current = "table"
-
-    def show_update_screen(self):
-        self.screen_manager.transition.direction = "left"
-        self.screen_manager.current = "update"
-
-class TableItemsScreen(Screen):
-    data_tables = None
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-        # Create a table.
         _dp = 35
         self.data_tables = MDDataTable(
             pos_hint={"center_y": 0.45, "center_x": 0.5},
@@ -85,56 +71,78 @@ class TableItemsScreen(Screen):
                 ("Unit Price", dp(_dp)),
                 ("Status", dp(_dp)),
             ],
-            row_data=[
-                ("Cake", "Cake 1", "30,000", "100", "Full"),
-                ("Cake", "Cake 2", "40,000", "100", "Medium"),
-                ("Cake", "Cake 3", "40,000", "100", "Low Stock"),
-            ],
+            row_data=items,
         )
 
-        # Connect sqlite3
+        self.add_widget(button_box)
+        self.add_widget(self.data_tables)
+
+    
+    def on_button_press(self, instance_button: MDRaisedButton) -> None:
+        '''Called when a control button is clicked.'''
+
+        try:
+            {
+                "Update": self.parent.parent.show_update_screen,
+
+            }[instance_button.text]()
+        except KeyError:
+            pass
+
+    def update_items(self):
         #create database or connect to one
-        conn = sqlite3.connect('first_db.db')
+        conn = sqlite3.connect('inventory_db.db')
 
         # crate a cursor
         c = conn.cursor()
 
-        # Create a table
-        c.execute("""CREATE TABLE if not exists customer (
-            name text)
-            """)
+        c.execute("SELECT * FROM item")
+        items = c.fetchall()
+        self.data_tables.row_data = items
         
         conn.commit()
         conn.close()
-
-        self.add_widget(self.data_tables)
-    
-    def confirm(self):
-        if self.root.ids.product_name.text == "" or self.root.ids.product_quantity.text == "" or self.root.ids.product_price.text == "" or self.root.ids.product_category.text == "" :
-            pass
-        else:
-            conn = sqlite3.connect('first_db.db')
-
-            c = conn.cursor()
-
-            c.execute("INSERT INTO customer VALUES (:first)",
-                    {
-                        'first': self.root.ids.word_input.text,
-                    }
-                    )
-            
-            self.root.ids.word_label.text = self.root.ids.word_input.text + " Added"
-
-            self.root.ids.word_input.text = ''
-            conn.commit()   
-
-            conn.close()
         
 class UpdateItemScreen(Screen):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        
 
+    def confirm(self):
+        if self.ids.product_name.text == "" or self.ids.product_quantity.text == "" or self.ids.product_price.text == "" or self.ids.product_category.text == "" :
+            pass
+        else:
+            conn = sqlite3.connect('inventory_db.db')
+
+            c = conn.cursor()
+
+            c.execute("INSERT INTO item VALUES (:category, :name, :quantity, :price, :status)",
+                    {
+                        'category': self.ids.product_category.text,
+                        'name': self.ids.product_name.text,
+                        'quantity': self.ids.product_quantity.text,
+                        'price': self.ids.product_price.text,
+                        'status': 'full'
+                    }
+                    )
+
+            self.ids.product_category.text = ""
+            self.ids.product_name.text = ""
+            self.ids.product_quantity.text = ""
+            self.ids.product_price.text = ""
+        
+            conn.commit()   
+            conn.close()
+
+            self.parent.parent.screen_manager.get_screen("inventory").update_items()
+            self.parent.parent.show_inventory_screen()
+            
+    def cancel(self):
+        self.ids.product_category.text = ""
+        self.ids.product_name.text = ""
+        self.ids.product_quantity.text = ""
+        self.ids.product_price.text = ""
+
+        self.parent.parent.show_inventory_screen()
 
 class TransactionScreen(Screen):
     def __init__(self, **kwargs):
@@ -169,11 +177,11 @@ class ScreenLayout(MDBoxLayout):
         self.screen_manager.add_widget(report_screen)
 
         # Add the employee screen
-        employee_screen = ReportScreen(name="employee")
+        employee_screen = EmployeeScreen(name="employee")
         self.screen_manager.add_widget(employee_screen)
 
         # Add the employee screen
-        updateItem_screen = ReportScreen(name="updateItem")
+        updateItem_screen = UpdateItemScreen(name="updateItem")
         self.screen_manager.add_widget(updateItem_screen)     
         self.add_widget(self.screen_manager)
     
@@ -194,7 +202,7 @@ class ScreenLayout(MDBoxLayout):
         self.screen_manager.transition.direction = "up"
         self.screen_manager.current = "employee"
     
-    def show_update_item_screen(self):
+    def show_update_screen(self):
         self.screen_manager.transition.direction = "up"
         self.screen_manager.current = "updateItem"
 

@@ -55,52 +55,71 @@
     size_hint: (None, None)
     size: (300, 50)
 
-<UpdateItemScreen>:
-    MDBoxLayout:
-        size_hint: (1, 1)
-        pos_hint: {'center_x': 0.5, 'center_y': 0.5}
-        orientation: 'vertical'
-        canvas.before:
-            Color:
-                rgba: C('#ffffff')
-            Rectangle:
-                pos: self.pos
-                size: self.size
 
-        GridLayout:
-            cols: 2
-            rows: 4
-            size_hint: (0.8, 0.4)
-            pos_hint: {'center_x': 0.5, 'center_y': 0.5}
-            Label:
-                text: 'Category'
-                font_size: 22
-                color: C('#2B3467')
-            TextInput:
-                id: product_category
-                hint_text: 'Product Category'
-            Label:
-                text: 'Product Name'
-                font_size: 22
-                color: C('#2B3467')
-            TextInput:
-                id: product_name
-                hint_text: 'Product Name'
-            Label:
-                text: 'Product Price'
-                font_size: 22
-                color: C('#2B3467')
-            TextInput:
-                id: product_price
-                hint_text: 'Product Price'
-            Label:
-                text: 'Product Quantity'
-                font_size: 22
-                color: C('#2B3467')
-            TextInput:
-                id: product_quantity
-                hint_text: 'Product Quantity'
-            
+<InventoryScreen>
+    name: "inventory"
+    id: inventory_screen
+
+
+<UpdateItemScreen>:
+    name: 'update'
+    id: update_item
+    
+    size_hint: (1, 1)
+    pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+    orientation: 'vertical'
+    canvas.before:
+        Color:
+            rgba: C('#ffffff')
+        Rectangle:
+            pos: self.pos
+            size: self.size
+    
+    MDBoxLayout:
+        size_hint : (None, None)
+        pos_hint : {'center_x': 0.8, 'center_y': 0.9}
+        spacing: 20
+        MDRaisedButton:
+            text: 'Cancel'
+            on_press: update_item.cancel()
+        MDRaisedButton:
+            text: 'Confirm'
+            on_press: update_item.confirm()
+
+    GridLayout:
+        cols: 2
+        rows: 4
+        size_hint: (0.8, 0.4)
+        pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+        Label:
+            text: 'Category'
+            font_size: 22
+            color: C('#2B3467')
+        TextInput:
+            id: product_category
+            hint_text: 'Product Category'
+        Label:
+            text: 'Product Name'
+            font_size: 22
+            color: C('#2B3467')
+        TextInput:
+            id: product_name
+            hint_text: 'Product Name'
+        Label:
+            text: 'Product Price'
+            font_size: 22
+            color: C('#2B3467')
+        TextInput:
+            id: product_price
+            hint_text: 'Product Price'
+        Label:
+            text: 'Product Quantity'
+            font_size: 22
+            color: C('#2B3467')
+        TextInput:
+            id: product_quantity
+            hint_text: 'Product Quantity'
+        
             
 
             
