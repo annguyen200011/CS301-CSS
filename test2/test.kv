@@ -119,7 +119,56 @@
         TextInput:
             id: product_quantity
             hint_text: 'Product Quantity'
-        
-            
+
+
+<EmployeeScreen>
+    name: "employee"
+    id: employee_screen
+
+
+<CreateEmployeeScreen>:
+    name: 'create_employee'
+    id: create_employee
+    
+    size_hint: (1, 1)
+    pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+    orientation: 'vertical'
+    canvas.before:
+        Color:
+            rgba: C('#ffffff')
+        Rectangle:
+            pos: self.pos
+            size: self.size
+    
+    MDBoxLayout:
+        size_hint : (None, None)
+        pos_hint : {'center_x': 0.8, 'center_y': 0.9}
+        spacing: 20
+        MDRaisedButton:
+            text: 'Cancel'
+            on_press: create_employee.cancel()
+        MDRaisedButton:
+            text: 'Confirm'
+            on_press: create_employee.confirm()
+
+    GridLayout:
+        cols: 2
+        rows: 2
+        size_hint: (0.8, 0.4)
+        pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+        Label:
+            text: 'Name'
+            font_size: 22
+            color: C('#2B3467')
+        TextInput:
+            id: employee_name
+            hint_text: 'Name'
+        Label:
+            text: 'Role'
+            font_size: 22
+            color: C('#2B3467')
+        TextInput:
+            id: employee_role
+            hint_text: 'Role'
 
             
