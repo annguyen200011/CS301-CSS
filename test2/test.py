@@ -12,7 +12,7 @@ from kivy.metrics import dp
 from kivy.lang import Builder
 import sqlite3
 
-Builder.load_file('test2.kv')
+Builder.load_file('test.kv')
 Window.size = (1280,832)
 
 class InventoryScreen(Screen):
@@ -155,9 +155,127 @@ class ReportScreen(Screen):
         self.add_widget(Label(text="Report Screen", color=(0,0,0,1)))
 
 class EmployeeScreen(Screen):
+    data_tables = None
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.add_widget(Label(text="Employee Screen", color=(0,0,0,1)))
+        button_box = MDBoxLayout(
+            pos_hint={"center_x": 0.8, "center_y": 0.9},
+            adaptive_size=True,
+            padding="24dp",
+            spacing="24dp",
+        )
+
+        for button_text in ["Search and Filter", "Create New"]:
+            button_box.add_widget(
+                MDRaisedButton(
+                    text=button_text, on_release=self.on_button_press
+                )
+            )
+
+        # Add the inventory screen
+        
+
+        # Connect sqlite3
+        #create database or connect to one
+        conn = sqlite3.connect('employee_db.db')
+
+        # crate a cursor
+        c = conn.cursor()
+
+        # Create a table
+        c.execute("""CREATE TABLE if not exists employees (
+            employeeID integer,
+            name text,
+            role text)
+            """)
+        c.execute("SELECT * FROM employees")
+        employees = c.fetchall()
+        
+        conn.commit()
+        conn.close()
+
+        _dp = 30
+        self.data_tables = MDDataTable(
+            pos_hint={"center_y": 0.45, "center_x": 0.5},
+            size_hint=(0.6, 0.6),
+            use_pagination=True,
+            rows_num = 10,
+            pagination_menu_pos = 'top',
+            column_data=[
+                ("Employee ID", dp(_dp)),
+                ("Name", dp(_dp)),
+                ("Role", dp(_dp))
+            ],
+            row_data=employees,
+        )
+
+        self.add_widget(button_box)
+        self.add_widget(self.data_tables)
+
+    
+    def on_button_press(self, instance_button: MDRaisedButton) -> None:
+        '''Called when a control button is clicked.'''
+
+        try:
+            {
+                "Create New": self.parent.parent.show_create_employee_screen,
+
+            }[instance_button.text]()
+        except KeyError:
+            pass
+
+    def update_items(self):
+        #create database or connect to one
+        conn = sqlite3.connect('employee_db.db')
+
+        # crate a cursor
+        c = conn.cursor()
+
+        c.execute("SELECT * FROM employees")
+        items = c.fetchall()
+        self.data_tables.row_data = items
+        
+        conn.commit()
+        conn.close()
+        
+class CreateEmployeeScreen(Screen):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+
+    def confirm(self):
+        if self.ids.employee_name.text == "" or self.ids.employee_role.text ==  "" :
+            pass
+        else:
+            conn = sqlite3.connect('employee_db.db')
+
+            c = conn.cursor()
+
+            c.execute("SELECT * FROM employees")
+            employees = c.fetchall()
+
+            c.execute("INSERT INTO employees VALUES (:employeeID, :name, :role)",
+                    {
+                        'employeeID': len(employees) + 1,
+                        'name': self.ids.employee_name.text,
+                        'role': self.ids.employee_role.text
+                    }
+                    )
+
+            self.ids.employee_role.text = ""
+            self.ids.employee_name.text = ""
+
+        
+            conn.commit()   
+            conn.close()
+
+            self.parent.parent.screen_manager.get_screen("employee").update_items()
+            self.parent.parent.show_employee_screen()
+            
+    def cancel(self):
+        self.ids.employee_role.text = ""
+        self.ids.employee_name.text = ""
+
+        self.parent.parent.show_employee_screen()
 
 class ScreenLayout(MDBoxLayout):
     screen_manager = ObjectProperty(None)
@@ -180,9 +298,15 @@ class ScreenLayout(MDBoxLayout):
         employee_screen = EmployeeScreen(name="employee")
         self.screen_manager.add_widget(employee_screen)
 
-        # Add the employee screen
+        # Add the items in inventory screen
         updateItem_screen = UpdateItemScreen(name="updateItem")
-        self.screen_manager.add_widget(updateItem_screen)     
+        self.screen_manager.add_widget(updateItem_screen)   
+
+        # Add new employee  screen
+        createEmployee_screen = CreateEmployeeScreen(name="createEmployee")
+        self.screen_manager.add_widget(createEmployee_screen)   
+
+
         self.add_widget(self.screen_manager)
     
 
@@ -205,6 +329,10 @@ class ScreenLayout(MDBoxLayout):
     def show_update_screen(self):
         self.screen_manager.transition.direction = "up"
         self.screen_manager.current = "updateItem"
+
+    def show_create_employee_screen(self):
+        self.screen_manager.transition.direction = "up"
+        self.screen_manager.current = "createEmployee"
 
 class MainLayout(MDBoxLayout):
     def __init__(self, **kwargs):
