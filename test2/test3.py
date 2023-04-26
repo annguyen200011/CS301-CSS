@@ -12,7 +12,7 @@ from kivy.metrics import dp
 from kivy.lang import Builder
 import sqlite3
 
-Builder.load_file('inventory_and_employee.kv')
+Builder.load_file('main.kv')
 Window.size = (1280,832)
 
 class InventoryScreen(Screen):
@@ -335,16 +335,72 @@ class ScreenLayout(MDBoxLayout):
         self.screen_manager.transition.direction = "up"
         self.screen_manager.current = "createEmployee"
 
-class HeheLayout(MDBoxLayout):
+
+class AdminHomeLayout(Screen):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
+class CashierHomeLayout(Screen):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+
+class LogInScreen(Screen):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+
+    def validate_user(self):
+        user_input = self.ids.username_field
+        pwd_input = self.ids.pwd_field
+        info = self.ids.info
+
+        user = user_input.text
+        pwd = pwd_input.text
+
+        if user == '' or pwd == '':
+            info.text = '[color=#FF0000] Username and/or password required [/color]'
+        else:
+            if (user == 'admin' and pwd == 'admin'):
+                info.text = '[color=#00FF00] Log in succesfully [/color]'
+                self.parent.parent.show_admin_screen()
+            elif (user == 'cashier' and pwd == 'cashier'):
+                self.parent.parent.show_cashier_screen()
+            elif (user == 'admin' and pwd is not 'admin') or (user == 'cashier' and pwd is not 'cashier'):
+                info.text = '[color=#FF0000] Invalid username and/or password [/color]'
+
+class MainLayout(MDFloatLayout):
+    screen_manager = ObjectProperty(None)
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.screen_manager = ScreenManager()
+        # Add the inventory screen
+        login_screen = LogInScreen(name="login")
+        self.screen_manager.add_widget(login_screen)
+
+        # Add the transaction screen
+        admin_screen = AdminHomeLayout(name="home_admin")
+        self.screen_manager.add_widget(admin_screen)
+
+        # Add the report screen
+        cashier_screen = CashierHomeLayout(name="home_cashier")
+        self.screen_manager.add_widget(cashier_screen)
+
+        self.add_widget(self.screen_manager)
+    
+    def show_admin_screen(self):
+        self.screen_manager.transition.direction = "up"
+        self.screen_manager.current = "home_admin"
+
+    def show_cashier_screen(self):
+        self.screen_manager.transition.direction = "up"
+        self.screen_manager.current = "home_cashier"
+
+        
 
 class MainApp(MDApp):
     def build(self):
-        self.theme_cls.theme_style = 'Light'
-        self.theme_cls.primary_palette = "BlueGray"
-        return HeheLayout()
+        Window.size=(1280, 832)
+        return MainLayout()
+        
 
 
 if __name__ == '__main__':
