@@ -1,16 +1,44 @@
-<MainWindow>
-    id: main_win
+#:import C kivy.utils.get_color_from_hex
+#:import NoTransition kivy.uix.screenmanager.NoTransition
 
+<MainLayout>:
     ScreenManager:
+        transition: NoTransition()
         Screen:
-            id: scrn_si
-            name: 'scrn_si'
+            id: login_scrn
+            name: 'login'
         Screen:
-            id: scrn_home_admin
-            name: 'scrn_home_admin'
+            id: home_scrn_admin
+            name: 'home_admin'
         Screen:
-            id: scrn_home_cashier
-            name: 'scrn_home_cashier'
+            id: home_scrn_cashier
+            name: 'home_cashier'
         Screen:
-            id: scrn_transaction
-            name: 'scrn_transaction'
+            id: inventory_scrn 
+            name: 'inventory'
+            transition: NoTransition()
+        Screen:
+            id: transaction_scrn 
+            name: 'transaction'
+            transition: NoTransition()
+        Screen:
+            id: table_items_scrn
+            name: 'table_items'
+        Screen:
+            id: update_items_scrn
+            name: 'update_items'
+            transition: NoTransition()
+        Screen: 
+            id: report_scrn 
+            name: 'report'
+            transition: NoTransition()
+        Screen:
+            id: employee_scrn 
+            name: 'employee'
+            transition: NoTransition()
+        Screen:
+            id: inventory_scrn_cashier
+            name: 'inventory_cashier'
+        Screen:
+            id: transaction_scrn_cashier
+            name: 'transaction_cashier'

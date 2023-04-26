@@ -1,3 +1,7 @@
+from kivy.app import App
+from kivy.uix.boxlayout import BoxLayout
+from kivy.core.window import Window
+
 from kivymd.app import MDApp
 from kivy.uix.label import Label
 from kivy.uix.textinput import TextInput
@@ -18,7 +22,7 @@ from kivy.lang import Builder
 import sqlite3
 import datetime
 
-Builder.load_file('test2.kv')
+Builder.load_file('screen.kv')
 Window.size = (1280,832)
 
 class LogInScreen(Screen):
@@ -44,7 +48,7 @@ class LogInScreen(Screen):
                 self.parent.parent.current = 'home_admin'
             elif (user == 'cashier' and pwd == 'cashier'):
                 self.parent.parent.current = 'home_cashier'
-            elif (user == 'admin' and pwd is not 'admin') or (user == 'cashier' and pwd is not 'cashier'):
+            elif (user == 'admin' and pwd != 'admin') or (user == 'cashier' and pwd is not 'cashier'):
                 info.text = '[color=#FF0000] Invalid username and/or password [/color]'
 
 class HomeScreenAdmin(Screen):
@@ -78,11 +82,11 @@ class InventoryScreen(Screen):
 
         self.screen_manager = ScreenManager()
         # Add the inventory screen
-        table_screen = TableItemsScreen(name="table")
+        table_screen = TableItemsScreen(name="table_items")
         self.screen_manager.add_widget(table_screen)
 
         # Add the transaction screen
-        update_screen = UpdateItemScreen(name="update")
+        update_screen = UpdateItemScreen(name="update_items")
         self.screen_manager.add_widget(update_screen)
 
         self.add_widget(button_box)
@@ -176,7 +180,6 @@ class UpdateItemScreen(Screen):
         super().__init__(**kwargs)
         
 
-
 class TransactionScreen(Screen):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -250,26 +253,3 @@ class ScreenLayout(MDBoxLayout):
     def show_update_item_screen(self):
         self.screen_manager.transition.direction = "left"
         self.screen_manager.current = "updateItem"
-
-class MainLayout(BoxLayout):
-
-    home_admin_widget = HomeScreenAdmin()
-    login_widget = LogInScreen()
-    home_cashier_widget = HomeScreenCashier()
-    transaction_widget = TransactionScreen()
-
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-        
-        self.ids.login_scrn.add_widget(self.login_widget)
-        self.ids.home_scrn_admin.add_widget(self.home_admin_widget)
-        
-
-class MainApp(MDApp):
-    def build(self):
-        Window.size=(1280, 832)
-        return MainLayout()
-
-
-if __name__ == '__main__':
-    MainApp().run()

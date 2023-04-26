@@ -1,0 +1,1102 @@
+#:import C kivy.utils.get_color_from_hex
+
+<LogInScreen>:
+    id: login_scrn
+    orientation: "vertical"
+    canvas.before:
+        Color:
+            rgba: (1,1,1,1)
+        Rectangle:
+            size: self.size
+            pos: self.pos
+    
+    BoxLayout:
+        size: root.width, root.height
+        orientation: 'vertical'
+        size_hint: None, None
+
+        Label:
+            size: 1280, 104
+            size_hint: None, None
+            canvas.before:
+                Color:
+                    rgba: (0.7294117647058823, 0.8431372549019608, 0.9137254901960784, 1)
+                Rectangle:
+                    size: self.size
+                    pos: self.pos
+            text: 'Checkout Counter'
+            text_size: 1280-31, self.height
+            valign: 'center'
+            halign: 'left'
+            font_size: 45
+            color: (43/255,52/255,103/255,1)
+            font_family: 'Lexend'
+        
+        BoxLayout: 
+            orientation: 'vertical'
+            size: 1280, 187
+            size_hint: None, None
+
+            Label:
+                text_size: self.size
+                text: 'Login'
+                font_size: 40
+                text_size: self.size
+                halign: 'center'
+                color: (43/255,52/255,103/255,1)
+                font_family: 'Lexend'
+
+        BoxLayout: 
+            orientation: 'vertical'
+            size: 1280, 429
+
+            Label: 
+                text: ''
+                size: 1280, 17
+                size_hint: None, None
+
+            BoxLayout:
+                size: 386, 58
+                size_hint: None, None
+                pos_hint: {'center_x': 0.5}
+
+                canvas.before:
+                    Color:
+                        rgba: 229/255, 229/255, 229/255, 1
+                    RoundedRectangle:
+                        size: self.size
+                        pos: self.pos
+                        radius: [13]
+                TextInput:
+                    background_color: 229/255, 229/255, 229/255, 0
+                    background_normal: ''
+                    background_active: ''
+                    size: 386, 58
+                    size_hint: None, None
+                    id: username_field
+                    pos_hint: {'center_x': .5}
+                    hint_text: 'Username'
+                    hint_text_color: 0.7, 0.7, 0.7, 1
+                    multiline: False
+                    focus: True
+                    on_text_validate: pwd_field.focus = True
+                    font_family: "Lexend"
+
+            Label: 
+                text: ''
+                size: 1280, 17
+                size_hint: None, None
+
+            BoxLayout:
+                size: 386, 58
+                size_hint: None, None
+                pos_hint: {'center_x': 0.5}
+
+                canvas.before:
+                    Color:
+                        rgba: 229/255, 229/255, 229/255, 1
+                    RoundedRectangle:
+                        size: self.size
+                        pos: self.pos
+                        radius: [13]
+
+                TextInput:
+                    id: pwd_field
+                    background_color: 229/255, 229/255, 229/255, 0
+                    background_normal: ''
+                    background_active: ''
+                    size_hint: 1,1
+                    hint_text: 'Password'
+                    valign: 'center'
+                    password: True
+                    hint_text_color: 0.7, 0.7, 0.7, 1
+                    multiline: False
+                    focus: True
+                    font_family: "Lexend"
+                    on_text_validate: root.validate_user()
+
+            Label:
+                id: info
+                text: ''
+                color: (1,0,0,1)
+                markup: True
+                size: 1280, 33
+                size_hint: None, None
+                pos_hint: {'center_x': .5}
+                font_size: 13
+
+            RoundedButton: 
+                pos_hint: {'center_x': .5}
+                size: 160, 58
+                size_hint: None, None
+                text: 'Log in'
+                on_release: root.validate_user()
+                font_family: "Lexend"
+
+            Label: 
+                text: ''
+                size: 1280, 100
+                size_hint: None, None
+
+            Label:
+                size: 1280, 22
+                size_hint: None, None
+                pos_hint: {'right': 0.99}
+                canvas.before:
+                    Color:
+                        rgba: (1,1,1,1)
+                    Rectangle:
+                        size: self.size
+                        pos: self.pos
+                text_size: self.size
+                valign: 'bottom'
+                halign: 'right'
+                text: root.dt_string
+                font_size: 15
+                color: (0,0,0,1)
+                font_family: "Lexend"
+
+
+<RoundedButton@Button>
+    background_color: 43/255, 52/255, 103/255, 0
+    background_normal: ''
+    canvas.before:
+        Color: 
+            rgba: 43/255, 52/255, 103/255, 1
+        RoundedRectangle:
+            size: self.size
+            pos: self.pos
+            radius: [13]
+<RoundedTextInput@TextInput>
+    foreground_color: 0,0,0,1
+    background_color: 1,1,1,1
+    background_normal: ''
+    background_active: ''
+    canvas.before:
+        Color: 
+            rgba: 229/255, 229/255, 229/255, 0
+        RoundedRectangle:
+            size: self.size
+            pos: self.pos
+            radius: [13]
+        
+
+<InventoryScreen>:
+    id: inventory_scrn
+    name: 'inventory'
+    operation: 'vertical'
+    canvas.before:
+        Color:
+            rgba: (1,1,1,1)
+        Rectangle:
+            size: self.size
+            pos: self.pos
+
+    BoxLayout:
+        size: root.width, root.height
+        orientation: 'vertical'
+        spacing: 3
+
+        Label:
+            id: label_bar
+            size_hint: None, None
+            size: 1280, 104
+            canvas.before:
+                Color:
+                    rgba: (0.7294117647058823, 0.8431372549019608, 0.9137254901960784, 1)
+                Rectangle:
+                    size: self.size
+                    pos: self.pos
+            text: "Checkout Counter"
+            text_size: 1280 - 31, self.height
+            valign: 'center'
+            halign: 'left'
+            font_size: 45
+            color: (43/255,52/255,103/255,1)
+            font_family: "Lexend"
+    
+        BoxLayout:
+            orientation: 'horizontal'
+            size_hint: None, None
+            size: 1280, root.height - label_bar.height
+
+            BoxLayout:
+                id: left_box
+                orientation: 'vertical'
+                size_hint: None, 1
+                width: 320
+                spacing: 3
+
+                Button:
+                    size: 320, 64
+                    size_hint: None, None
+                    text: "Inventory"
+                    text_size: self. width - 31, self.height
+                    font_size: 22
+                    color: 1,1,1,1
+                    on_press: root.parent.parent.current = 'inventory'
+                    group: 'screen'
+                    background_color: C('#2B3467')
+                    valign: 'center'
+                    background_normal: ''
+
+                Button:
+                    size: 320, 64
+                    size_hint: None, None
+                    text: "Transaction"
+                    color: C('#2B3467')
+                    background_color: C('#BAD7E9')
+                    text_size: self. width - 31, self.height
+                    font_size: 22
+                    on_press: root.parent.parent.current = 'transaction'
+                    group: 'screen'
+                    valign: 'center'
+                    background_normal: ''
+
+                Button:
+                    size: 320, 64
+                    size_hint: None, None
+                    text: "Report"
+                    on_press: root.parent.parent.current = 'report'
+                    text_size: self.width -31, self.height
+                    group: 'screen'
+                    font_size: 22
+                    color: C('#2B3467')
+                    background_color: C('#BAD7E9')
+                    valign: 'center'
+                    background_normal: ''
+
+                Button:
+                    size: 320, 64
+                    size_hint: None, None
+                    text: "Employee"
+                    color: C('#2B3467')
+                    text_size: self.width -31, self.height
+                    font_size: 22
+                    on_press: root.parent.parent.current = 'employee'
+                    group: 'screen'
+                    background_color: C('#BAD7E9')
+                    valign: 'center'
+                    background_normal: ''
+
+                Label:
+                    text: ''
+                    canvas.before:
+                        Color:
+                            rgba: (0.7294117647058823, 0.8431372549019608, 0.9137254901960784, 1)
+                        Rectangle:
+                            size: self.size
+                            pos: self.pos 
+
+            Label:
+                text: 'Inventory screen'
+                color: 0,0,0,1
+                canvas.before:
+                    Color:
+                        rgba: (1,1,1, 1)
+                    Rectangle:
+                        size: self.size
+                        pos: self.pos
+
+<TransactionScreen>:
+    id: transactin_scrn
+    name: 'transaction'
+    operation: 'vertical'
+    canvas.before:
+        Color:
+            rgba: (1,1,1,1)
+        Rectangle:
+            size: self.size
+            pos: self.pos
+
+    BoxLayout:
+        size: root.width, root.height
+        orientation: 'vertical'
+        spacing: 3
+
+        Label:
+            id: label_bar
+            size_hint: None, None
+            size: 1280, 104
+            canvas.before:
+                Color:
+                    rgba: (0.7294117647058823, 0.8431372549019608, 0.9137254901960784, 1)
+                Rectangle:
+                    size: self.size
+                    pos: self.pos
+            text: "Checkout Counter"
+            text_size: 1280 - 31, self.height
+            valign: 'center'
+            halign: 'left'
+            font_size: 45
+            color: (43/255,52/255,103/255,1)
+            font_family: "Lexend"
+    
+        BoxLayout:
+            orientation: 'horizontal'
+            size_hint: None, None
+            size: 1280, root.height - label_bar.height
+
+            BoxLayout:
+                id: left_box
+                orientation: 'vertical'
+                size_hint: None, 1
+                width: 320
+                spacing: 3
+
+                Button:
+                    size: 320, 64
+                    size_hint: None, None
+                    text: "Inventory"
+                    text_size: self. width - 31, self.height
+                    font_size: 22
+                    color: C('#2B3467')
+                    on_press: root.parent.parent.current = 'inventory'
+                    group: 'screen'
+                    background_color: C('#BAD7E9')
+                    valign: 'center'
+                    background_normal: ''
+
+                Button:
+                    size: 320, 64
+                    size_hint: None, None
+                    text: "Transaction"
+                    color: 1,1,1,1
+                    background_color: C('#2B3467')
+                    text_size: self. width - 31, self.height
+                    font_size: 22
+                    on_press: root.parent.parent.current = 'transaction'
+                    group: 'screen'
+                    valign: 'center'
+                    background_normal: ''
+
+                Button:
+                    size: 320, 64
+                    size_hint: None, None
+                    text: "Report"
+                    on_press: root.parent.parent.current = 'report'
+                    text_size: self.width -31, self.height
+                    group: 'screen'
+                    font_size: 22
+                    color: C('#2B3467')
+                    background_color: C('#BAD7E9')
+                    valign: 'center'
+                    background_normal: ''
+
+                Button:
+                    size: 320, 64
+                    size_hint: None, None
+                    text: "Employee"
+                    color: C('#2B3467')
+                    text_size: self.width -31, self.height
+                    font_size: 22
+                    on_press: 
+                        root.parent.parent.current = 'employee'
+                    group: 'screen'
+                    background_color: C('#BAD7E9')
+                    valign: 'center'
+                    background_normal: ''
+
+                Label:
+                    text: ''
+                    canvas.before:
+                        Color:
+                            rgba: (0.7294117647058823, 0.8431372549019608, 0.9137254901960784, 1)
+                        Rectangle:
+                            size: self.size
+                            pos: self.pos 
+
+            Label:
+                text: 'Transaction screen'
+                color: 0,0,0,1
+                canvas.before:
+                    Color:
+                        rgba: (1,1,1, 1)
+                    Rectangle:
+                        size: self.size
+                        pos: self.pos
+
+<ReportScreen>:
+    id: report_scrn
+    name: 'report'
+    operation: 'vertical'
+    canvas.before:
+        Color:
+            rgba: (1,1,1,1)
+        Rectangle:
+            size: self.size
+            pos: self.pos
+
+    BoxLayout:
+        size: root.width, root.height
+        orientation: 'vertical'
+        spacing: 3
+
+        Label:
+            id: label_bar
+            size_hint: None, None
+            size: 1280, 104
+            canvas.before:
+                Color:
+                    rgba: (0.7294117647058823, 0.8431372549019608, 0.9137254901960784, 1)
+                Rectangle:
+                    size: self.size
+                    pos: self.pos
+            text: "Checkout Counter"
+            text_size: 1280 - 31, self.height
+            valign: 'center'
+            halign: 'left'
+            font_size: 45
+            color: (43/255,52/255,103/255,1)
+            font_family: "Lexend"
+    
+        BoxLayout:
+            orientation: 'horizontal'
+            size_hint: None, None
+            size: 1280, root.height - label_bar.height
+
+            BoxLayout:
+                id: left_box
+                orientation: 'vertical'
+                size_hint: None, 1
+                width: 320
+                spacing: 3
+
+                Button:
+                    size: 320, 64
+                    size_hint: None, None
+                    text: "Inventory"
+                    text_size: self. width - 31, self.height
+                    font_size: 22
+                    color: C('#2B3467')
+                    on_press: root.parent.parent.current = 'inventory'
+                    group: 'screen'
+                    background_color: C('#BAD7E9')
+                    valign: 'center'
+                    background_normal: ''
+
+                Button:
+                    size: 320, 64
+                    size_hint: None, None
+                    text: "Transaction"
+                    color: C('#2B3467')
+                    background_color: C('#BAD7E9')
+                    text_size: self. width - 31, self.height
+                    font_size: 22
+                    on_press: root.parent.parent.current = 'transaction'
+                    group: 'screen'
+                    valign: 'center'
+                    background_normal: ''
+
+                Button:
+                    size: 320, 64
+                    size_hint: None, None
+                    text: "Report"
+                    on_press: root.parent.parent.current = 'report'
+                    text_size: self.width -31, self.height
+                    group: 'screen'
+                    font_size: 22
+                    color: 1,1,1,1
+                    background_color: C('#2B3467')
+                    valign: 'center'
+                    background_normal: ''
+
+                Button:
+                    size: 320, 64
+                    size_hint: None, None
+                    text: "Employee"
+                    color: C('#2B3467')
+                    text_size: self.width -31, self.height
+                    font_size: 22
+                    on_press: root.parent.parent.current = 'employee'
+                    group: 'screen'
+                    background_color: C('#BAD7E9')
+                    valign: 'center'
+                    background_normal: ''
+
+                Label:
+                    text: ''
+                    canvas.before:
+                        Color:
+                            rgba: (0.7294117647058823, 0.8431372549019608, 0.9137254901960784, 1)
+                        Rectangle:
+                            size: self.size
+                            pos: self.pos 
+
+            Label:
+                text: 'Report screen'
+                color: 0,0,0,1
+                canvas.before:
+                    Color:
+                        rgba: (1,1,1, 1)
+                    Rectangle:
+                        size: self.size
+                        pos: self.pos
+
+<EmployeeScreen>:
+    id: employee_scrn
+    name: 'employee'
+    operation: 'vertical'
+    canvas.before:
+        Color:
+            rgba: (1,1,1,1)
+        Rectangle:
+            size: self.size
+            pos: self.pos
+
+    BoxLayout:
+        size: root.width, root.height
+        orientation: 'vertical'
+        spacing: 3
+
+        Label:
+            id: label_bar
+            size_hint: None, None
+            size: 1280, 104
+            canvas.before:
+                Color:
+                    rgba: (0.7294117647058823, 0.8431372549019608, 0.9137254901960784, 1)
+                Rectangle:
+                    size: self.size
+                    pos: self.pos
+            text: "Checkout Counter"
+            text_size: 1280 - 31, self.height
+            valign: 'center'
+            halign: 'left'
+            font_size: 45
+            color: (43/255,52/255,103/255,1)
+            font_family: "Lexend"
+    
+        BoxLayout:
+            orientation: 'horizontal'
+            size_hint: None, None
+            size: 1280, root.height - label_bar.height
+
+            BoxLayout:
+                id: left_box
+                orientation: 'vertical'
+                size_hint: None, 1
+                width: 320
+                spacing: 3
+
+                Button:
+                    size: 320, 64
+                    size_hint: None, None
+                    text: "Inventory"
+                    text_size: self. width - 31, self.height
+                    font_size: 22
+                    color: C('#2B3467')
+                    on_press: root.parent.parent.current = 'inventory'
+                    group: 'screen'
+                    background_color: C('#BAD7E9')
+                    valign: 'center'
+                    background_normal: ''
+
+                Button:
+                    size: 320, 64
+                    size_hint: None, None
+                    text: "Transaction"
+                    color: C('#2B3467')
+                    background_color: C('#BAD7E9')
+                    text_size: self. width - 31, self.height
+                    font_size: 22
+                    on_press: root.parent.parent.current = 'transaction'
+                    group: 'screen'
+                    valign: 'center'
+                    background_normal: ''
+
+                Button:
+                    size: 320, 64
+                    size_hint: None, None
+                    text: "Report"
+                    on_press: root.parent.parent.current = 'report'
+                    text_size: self.width -31, self.height
+                    group: 'screen'
+                    font_size: 22
+                    color: C('#2B3467')
+                    background_color: C('#BAD7E9')
+                    valign: 'center'
+                    background_normal: ''
+
+                Button:
+                    size: 320, 64
+                    size_hint: None, None
+                    text: "Employee"
+                    color: 1,1,1,1
+                    text_size: self.width -31, self.height
+                    font_size: 22
+                    on_press: root.parent.parent.current = 'employee'
+                    group: 'screen'
+                    background_color: C('#2B3467')
+                    valign: 'center'
+                    background_normal: ''
+
+                Label:
+                    text: ''
+                    canvas.before:
+                        Color:
+                            rgba: (0.7294117647058823, 0.8431372549019608, 0.9137254901960784, 1)
+                        Rectangle:
+                            size: self.size
+                            pos: self.pos 
+
+            Label:
+                text: 'Employee screen'
+                color: 0,0,0,1
+                canvas.before:
+                    Color:
+                        rgba: (1,1,1, 1)
+                    Rectangle:
+                        size: self.size
+                        pos: self.pos
+
+
+<TextInput>:
+    size_hint: (None, None)
+    size: (300, 50)
+
+<UpdateItemScreen>:
+    id: update_items_scrn
+    name: 'update_items'
+    MDBoxLayout:
+        size_hint: (1, 1)
+        pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+        orientation: 'vertical'
+        canvas.before:
+            Color:
+                rgba: C('#ffffff')
+            Rectangle:
+                pos: self.pos
+                size: self.size
+
+        GridLayout:
+            cols: 2
+            rows: 4
+            size_hint: (0.8, 0.4)
+            pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+            Label:
+                text: 'Category'
+                font_size: 22
+                color: C('#2B3467')
+            TextInput:
+                id: product_category
+                hint_text: 'Product Category'
+            Label:
+                text: 'Product Name'
+                font_size: 22
+                color: C('#2B3467')
+            TextInput:
+                id: product_name
+                hint_text: 'Product Name'
+            Label:
+                text: 'Product Price'
+                font_size: 22
+                color: C('#2B3467')
+            TextInput:
+                id: product_price
+                hint_text: 'Product Price'
+            Label:
+                text: 'Product Quantity'
+                font_size: 22
+                color: C('#2B3467')
+            TextInput:
+                id: product_quantity
+                hint_text: 'Product Quantity'
+
+<HomeScreenAdmin>:
+    name: 'home_admin'
+    id: home_scrn_admin
+    operation: 'vertical'
+    canvas.before:
+        Color:
+            rgba: (1,1,1,1)
+        Rectangle:
+            size: self.size
+            pos: self.pos
+
+    BoxLayout:
+        size: root.width, root.height
+        orientation: 'vertical'
+        spacing: 3
+
+        Label:
+            id: label_bar
+            size_hint: None, None
+            size: 1280, 104
+            canvas.before:
+                Color:
+                    rgba: (0.7294117647058823, 0.8431372549019608, 0.9137254901960784, 1)
+                Rectangle:
+                    size: self.size
+                    pos: self.pos
+            text: "Checkout Counter"
+            text_size: 1280 - 31, self.height
+            valign: 'center'
+            halign: 'left'
+            font_size: 45
+            color: (43/255,52/255,103/255,1)
+            font_family: "Lexend"
+    
+        BoxLayout:
+            orientation: 'horizontal'
+            size_hint: None, None
+            size: 1280, root.height - label_bar.height
+
+            BoxLayout:
+                id: left_box
+                orientation: 'vertical'
+                size_hint: None, 1
+                width: 320
+                spacing: 3
+
+                Button:
+                    size: 320, 64
+                    size_hint: None, None
+                    text: "Inventory"
+                    text_size: self. width - 31, self.height
+                    font_size: 22
+                    color: C('#2B3467')
+                    on_press: root.parent.parent.current = 'inventory'
+                    group: 'screen'
+                    background_color: C('#BAD7E9')
+                    valign: 'center'
+                    background_normal: ''
+
+                Button:
+                    size: 320, 64
+                    size_hint: None, None
+                    text: "Transaction"
+                    color: C('#2B3467')
+                    background_color: C('#BAD7E9')
+                    text_size: self. width - 31, self.height
+                    font_size: 22
+                    on_press: self.background_color = C('#2B3467')
+                    on_press: self.color = (1,1,1,1)
+                    on_press: root.parent.parent.current = 'transaction'
+                    group: 'screen'
+                    on_release: self.background_color = C('#BAD7E9')
+                    on_release: self.color = C('#2B3467')
+                    valign: 'center'
+                    background_normal: ''
+
+                Button:
+                    size: 320, 64
+                    size_hint: None, None
+                    text: "Report"
+                    on_press: root.parent.parent.current = 'report'
+                    text_size: self.width -31, self.height
+                    group: 'screen'
+                    font_size: 22
+                    color: C('#2B3467')
+                    background_color: C('#BAD7E9')
+                    valign: 'center'
+                    background_normal: ''
+
+                Button:
+                    size: 320, 64
+                    size_hint: None, None
+                    text: "Employee"
+                    color: C('#2B3467')
+                    text_size: self.width -31, self.height
+                    font_size: 22
+                    on_press: root.parent.parent.current = 'employee'
+                    group: 'screen'
+                    background_color: C('#BAD7E9')
+                    valign: 'center'
+                    background_normal: ''
+
+                Label:
+                    text: ''
+                    canvas.before:
+                        Color:
+                            rgba: (0.7294117647058823, 0.8431372549019608, 0.9137254901960784, 1)
+                        Rectangle:
+                            size: self.size
+                            pos: self.pos 
+
+            Label:
+                size: 960, self.height
+                size_hint: None, 1
+                text:'Welcome back, Lala'
+                text_size: self.width - 31,  self.height - 10
+                valign: 'top'
+                halign: 'left'
+                color: 0,0,0,1
+                font_size: 24
+
+<HomeScreenCashier>:
+    name: 'home_cashier'
+    id: home_scrn_cashier
+    operation: 'vertical'
+    canvas.before:
+        Color:
+            rgba: (1,1,1,1)
+        Rectangle:
+            size: self.size
+            pos: self.pos
+
+    BoxLayout:
+        size: root.width, root.height
+        orientation: 'vertical'
+        spacing: 3
+
+        Label:
+            id: label_bar
+            size_hint: None, None
+            size: 1280, 104
+            canvas.before:
+                Color:
+                    rgba: (0.7294117647058823, 0.8431372549019608, 0.9137254901960784, 1)
+                Rectangle:
+                    size: self.size
+                    pos: self.pos
+            text: "Checkout Counter"
+            text_size: 1280 - 31, self.height
+            valign: 'center'
+            halign: 'left'
+            font_size: 45
+            color: (43/255,52/255,103/255,1)
+            font_family: "Lexend"
+    
+        BoxLayout:
+            orientation: 'horizontal'
+            size_hint: None, None
+            size: 1280, root.height - label_bar.height
+
+            BoxLayout:
+                id: left_box
+                orientation: 'vertical'
+                size_hint: None, 1
+                width: 320
+                spacing: 3
+
+                Button:
+                    size: 320, 64
+                    size_hint: None, None
+                    text: "Inventory"
+                    text_size: self. width - 31, self.height
+                    font_size: 22
+                    color: C('#2B3467')
+                    on_press: root.parent.parent.current = 'inventory_cashier'
+                    group: 'screen'
+                    background_color: C('#BAD7E9')
+                    valign: 'center'
+                    background_normal: ''
+
+                Button:
+                    size: 320, 64
+                    size_hint: None, None
+                    text: "Transaction"
+                    color: C('#2B3467')
+                    background_color: C('#BAD7E9')
+                    text_size: self. width - 31, self.height
+                    font_size: 22
+                    on_press: self.background_color = C('#2B3467')
+                    on_press: self.color = (1,1,1,1)
+                    on_press: root.parent.parent.current = 'transaction_cashier'
+                    group: 'screen'
+                    on_release: self.background_color = C('#BAD7E9')
+                    on_release: self.color = C('#2B3467')
+                    valign: 'center'
+                    background_normal: ''
+
+                Label:
+                    text: ''
+                    canvas.before:
+                        Color:
+                            rgba: (0.7294117647058823, 0.8431372549019608, 0.9137254901960784, 1)
+                        Rectangle:
+                            size: self.size
+                            pos: self.pos 
+
+            Label:
+                size: 960, self.height
+                size_hint: None, 1
+                text:'Welcome back, Lala'
+                text_size: self.width - 31,  self.height - 10
+                valign: 'top'
+                halign: 'left'
+                color: 0,0,0,1
+                font_size: 24   
+
+<InventoryScreenCashier>:
+    id: inventory_scrn_cashier
+    name: 'inventory_cashier'
+    operation: 'vertical'
+    canvas.before:
+        Color:
+            rgba: (1,1,1,1)
+        Rectangle:
+            size: self.size
+            pos: self.pos
+
+    BoxLayout:
+        size: root.width, root.height
+        orientation: 'vertical'
+        spacing: 3
+
+        Label:
+            id: label_bar
+            size_hint: None, None
+            size: 1280, 104
+            canvas.before:
+                Color:
+                    rgba: (0.7294117647058823, 0.8431372549019608, 0.9137254901960784, 1)
+                Rectangle:
+                    size: self.size
+                    pos: self.pos
+            text: "Checkout Counter"
+            text_size: 1280 - 31, self.height
+            valign: 'center'
+            halign: 'left'
+            font_size: 45
+            color: (43/255,52/255,103/255,1)
+            font_family: "Lexend"
+    
+        BoxLayout:
+            orientation: 'horizontal'
+            size_hint: None, None
+            size: 1280, root.height - label_bar.height
+
+            BoxLayout:
+                id: left_box
+                orientation: 'vertical'
+                size_hint: None, 1
+                width: 320
+                spacing: 3
+
+                Button:
+                    size: 320, 64
+                    size_hint: None, None
+                    text: "Inventory"
+                    text_size: self. width - 31, self.height
+                    font_size: 22
+                    color: 1,1,1,1
+                    on_press: root.parent.parent.current = 'inventory_cashier'
+                    group: 'screen'
+                    background_color: C('#2B3467')
+                    valign: 'center'
+                    background_normal: ''
+
+                Button:
+                    size: 320, 64
+                    size_hint: None, None
+                    text: "Transaction"
+                    color: C('#2B3467')
+                    background_color: C('#BAD7E9')
+                    text_size: self. width - 31, self.height
+                    font_size: 22
+                    on_press: root.parent.parent.current = 'transaction_cashier'
+                    group: 'screen'
+                    valign: 'center'
+                    background_normal: ''
+
+                Label:
+                    text: ''
+                    canvas.before:
+                        Color:
+                            rgba: (0.7294117647058823, 0.8431372549019608, 0.9137254901960784, 1)
+                        Rectangle:
+                            size: self.size
+                            pos: self.pos 
+
+            Label:
+                text: 'Inventory screen'
+                color: 0,0,0,1
+                canvas.before:
+                    Color:
+                        rgba: (1,1,1, 1)
+                    Rectangle:
+                        size: self.size
+                        pos: self.pos
+
+<TransactionScreenCashier>:
+    id: transactin_scrn_cashier
+    name: 'transaction_cashier'
+    operation: 'vertical'
+    canvas.before:
+        Color:
+            rgba: (1,1,1,1)
+        Rectangle:
+            size: self.size
+            pos: self.pos
+
+    BoxLayout:
+        size: root.width, root.height
+        orientation: 'vertical'
+        spacing: 3
+
+        Label:
+            id: label_bar
+            size_hint: None, None
+            size: 1280, 104
+            canvas.before:
+                Color:
+                    rgba: (0.7294117647058823, 0.8431372549019608, 0.9137254901960784, 1)
+                Rectangle:
+                    size: self.size
+                    pos: self.pos
+            text: "Checkout Counter"
+            text_size: 1280 - 31, self.height
+            valign: 'center'
+            halign: 'left'
+            font_size: 45
+            color: (43/255,52/255,103/255,1)
+            font_family: "Lexend"
+    
+        BoxLayout:
+            orientation: 'horizontal'
+            size_hint: None, None
+            size: 1280, root.height - label_bar.height
+
+            BoxLayout:
+                id: left_box
+                orientation: 'vertical'
+                size_hint: None, 1
+                width: 320
+                spacing: 3
+
+                Button:
+                    size: 320, 64
+                    size_hint: None, None
+                    text: "Inventory"
+                    text_size: self. width - 31, self.height
+                    font_size: 22
+                    color: C('#2B3467')
+                    on_press: root.parent.parent.current = 'inventory_cashier'
+                    group: 'screen'
+                    background_color: C('#BAD7E9')
+                    valign: 'center'
+                    background_normal: ''
+
+                Button:
+                    size: 320, 64
+                    size_hint: None, None
+                    text: "Transaction"
+                    color: 1,1,1,1
+                    background_color: C('#2B3467')
+                    text_size: self. width - 31, self.height
+                    font_size: 22
+                    on_press: root.parent.parent.current = 'transaction_cashier'
+                    group: 'screen'
+                    valign: 'center'
+                    background_normal: ''
+
+                Label:
+                    text: ''
+                    canvas.before:
+                        Color:
+                            rgba: (0.7294117647058823, 0.8431372549019608, 0.9137254901960784, 1)
+                        Rectangle:
+                            size: self.size
+                            pos: self.pos 
+
+            Label:
+                text: 'Transaction screen'
+                color: 0,0,0,1
+                canvas.before:
+                    Color:
+                        rgba: (1,1,1, 1)
+                    Rectangle:
+                        size: self.size
+                        pos: self.pos
