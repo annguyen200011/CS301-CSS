@@ -335,7 +335,7 @@ class ScreenLayout(MDBoxLayout):
         self.screen_manager.transition.direction = "up"
         self.screen_manager.current = "createEmployee"
 
-class MainLayout(MDBoxLayout):
+class HeheLayout(MDBoxLayout):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
@@ -344,7 +344,7 @@ class MainApp(MDApp):
     def build(self):
         self.theme_cls.theme_style = 'Light'
         self.theme_cls.primary_palette = "BlueGray"
-        return MainLayout()
+        return HeheLayout()
 
 
 if __name__ == '__main__':
