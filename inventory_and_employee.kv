@@ -1,0 +1,243 @@
+#:import C kivy.utils.get_color_from_hex
+
+<MainLayout>:
+    orientation: 'vertical'
+    size: root.width, root.height
+    MDBoxLayout:
+        size_hint_y: None
+        height: 104
+        canvas.before:
+            Color:
+                rgba: C('#BAD7E9')
+            Rectangle:
+                pos: self.pos
+                size: self.size
+        Label:
+            text: 'Checkout Counter Software'
+            font_size: 45
+            color: C('#2B3467')
+            text_size: self.width - 31, self.height
+            valign: 'center'
+        
+    MDBoxLayout:
+        orientation: 'horizontal'
+
+        MDBoxLayout:
+            orientation: 'vertical'
+            size_hint_x: None
+            width: 320
+            spacing: 3
+
+            Label:
+                text:''
+                size: 0,0
+                size_hint: None, None
+            
+            Button:
+                size: 320, 64
+                size_hint: None, None
+                text: "Inventory"
+                text_size: self. width - 31, self.height
+                font_size: 22
+                color: C('#2B3467')
+                on_press: scrn_mngr.show_inventory_screen()
+                group: 'screen'
+                background_color: C('#BAD7E9')
+                valign: 'center'
+                background_normal: ''
+
+            Button:
+                size: 320, 64
+                size_hint: None, None
+                text: "Transaction"
+                color: C('#2B3467')
+                background_color: C('#BAD7E9')
+                text_size: self. width - 31, self.height
+                font_size: 22
+                on_press: scrn_mngr.show_transaction_screen()
+                group: 'screen'
+                valign: 'center'
+                background_normal: ''
+
+            Button:
+                size: 320, 64
+                size_hint: None, None
+                text: "Report"
+                on_press: scrn_mngr.show_report_screen()
+                text_size: self.width -31, self.height
+                group: 'screen'
+                font_size: 22
+                color: C('#2B3467')
+                background_color: C('#BAD7E9')
+                valign: 'center'
+                background_normal: ''
+
+            Button:
+                size: 320, 64
+                size_hint: None, None
+                text: "Employee"
+                color: C('#2B3467')
+                text_size: self.width -31, self.height
+                font_size: 22
+                on_press: scrn_mngr.show_employee_screen()
+                group: 'screen'
+                background_color: C('#BAD7E9')
+                valign: 'center'
+                background_normal: ''
+            Label:
+                text: ''
+                canvas.before:
+                    Color:
+                        rgba: C('#BAD7E9')
+                    Rectangle:
+                        pos: self.pos
+                        size: self.size
+        ScreenLayout:
+            id: scrn_mngr
+            orientation: 'vertical'     
+<TextInput>:
+    size_hint: (None, None)
+    size: (300, 50)
+
+
+<InventoryScreen>
+    name: "inventory"
+    id: inventory_screen
+
+
+<UpdateItemScreen>:
+    name: 'update'
+    id: update_item
+    
+    size_hint: (1, 1)
+    pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+    orientation: 'vertical'
+    canvas.before:
+        Color:
+            rgba: C('#ffffff')
+        Rectangle:
+            pos: self.pos
+            size: self.size
+    
+    MDBoxLayout:
+        size_hint : (None, None)
+        pos_hint : {'center_x': 0.8, 'center_y': 0.9}
+        spacing: 20
+        MDRaisedButton:
+            text: 'Cancel'
+            on_press: update_item.cancel()
+        MDRaisedButton:
+            text: 'Confirm'
+            on_press: update_item.confirm()
+
+    GridLayout:
+        cols: 2
+        rows: 4
+        size_hint: (0.8, 0.4)
+        pos_hint: {'center_x': 0.4, 'center_y': 0.5}
+
+        Label:
+            text: 'Category'
+            font_size: 22
+            color: C('#2B3467')
+            text_size: self.width - 100, self.height
+            halign: 'right'
+        TextInput:
+            id: product_category
+            hint_text: 'Product Category'
+            background_color: 229/255, 229/255, 229/255, 1
+            background_normal: ''
+            multiline: False
+            focus: True
+            on_text_validate: product_name.on_focus = True
+        Label:
+            text: 'Product Name'
+            font_size: 22
+            color: C('#2B3467')
+            text_size: self.width - 100, self.height
+            halign: 'right'
+        TextInput:
+            id: product_name
+            hint_text: 'Product Name'
+            background_color: 229/255, 229/255, 229/255, 1
+            background_normal: ''
+            multiline: False
+            on_text_validate: product_price.on_focus = True
+        Label:
+            text: 'Product Price'
+            font_size: 22
+            color: C('#2B3467')
+            text_size: self.width - 100, self.height
+            halign: 'right'
+        TextInput:
+            id: product_price
+            hint_text: 'Product Price'
+            background_color: 229/255, 229/255, 229/255, 1
+            background_normal: ''
+            multiline: False
+            on_text_validate: product_quantity.on_focus = True
+        Label:
+            text: 'Product Quantity'
+            font_size: 22
+            color: C('#2B3467')
+            text_size: self.width - 100, self.height
+            halign: 'right'
+        TextInput:
+            id: product_quantity
+            hint_text: 'Product Quantity'
+            background_color: 229/255, 229/255, 229/255, 1
+            background_normal: ''
+            multiline: False
+
+
+<EmployeeScreen>
+    name: "employee"
+    id: employee_screen
+
+
+<CreateEmployeeScreen>:
+    name: 'create_employee'
+    id: create_employee
+    
+    size_hint: (1, 1)
+    pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+    orientation: 'vertical'
+    canvas.before:
+        Color:
+            rgba: C('#ffffff')
+        Rectangle:
+            pos: self.pos
+            size: self.size
+    
+    MDBoxLayout:
+        size_hint : (None, None)
+        pos_hint : {'center_x': 0.8, 'center_y': 0.9}
+        spacing: 20
+        MDRaisedButton:
+            text: 'Cancel'
+            on_press: create_employee.cancel()
+        MDRaisedButton:
+            text: 'Confirm'
+            on_press: create_employee.confirm()
+
+    GridLayout:
+        cols: 2
+        rows: 2
+        size_hint: (0.8, 0.4)
+        pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+        Label:
+            text: 'Name'
+            font_size: 22
+            color: C('#2B3467')
+        TextInput:
+            id: employee_name
+            hint_text: 'Name'
+        Label:
+            text: 'Role'
+            font_size: 22
+            color: C('#2B3467')
+        TextInput:
+            id: employee_role
+            hint_text: 'Role'
+
+            
