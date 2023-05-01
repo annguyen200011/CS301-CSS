@@ -1,0 +1,89 @@
+<FlatButton@ButtonBehavior+Label>:
+    font_size: 14
+
+<TransactionWindow>:
+    id: main_win
+    orientation: 'vertical'
+    canvas.before:
+        Color:
+            rgba: (217/255, 217/255, 217/255, 1)
+        Rectangle:
+            size: self.size
+            pos: self.pos
+
+    FloatLayout:
+        orientation: 'horizontal'
+        size_hint_y: None
+        id: header
+        height: 104
+        #padding: [dp(37), 0, 0, 0]
+        canvas.before:
+            Color:
+                rgba: (186/255, 215/255, 233/255, 1)
+            Rectangle:
+                size: self.size
+                pos: self.pos
+        MDIcon:
+            icon: 'arrow-left'
+            padding: dp(37), 0
+            width: dp(52)
+            height: dp(52)
+            font_size: sp(45)
+            pos_hint: {'top': 0.7333, 'left': 0.02}
+
+        Label:
+            padding: dp(35.67), 0
+            text: 'Checkout Counter > New Order'
+            font: 'Lexend-Regular'
+            font_size: sp(45)
+            bold: False
+            color: (43/255,52/255,103/255,1)
+            pos_hint: {'top': 1.0333, 'left': 0.16}
+
+        MDIconButton:
+            id: loggedin_user
+            icon: 'dog'
+            color: (43/255, 52/255, 103/255, 1)
+            width: sp(81)
+            height: sp(64)
+            pos_hint: {'top': 0.75, 'right': 0.96}
+
+    BoxLayout:
+        id: tab
+        size_hint_y: None
+        height: sp(64)
+        canvas.before:
+            Color:
+                rgba: (242/255,242/255,242/255, 1)
+            Rectangle:
+                size: self.size
+                pos: self.pos
+        Button:
+            text: 'ORDER INFORMATION'
+            font: 'BalsamiqSans-Regular'
+            font_size: sp(14)
+            background_normal: ''
+            background_color: 
+            color: (26/255,26/255,26/255, 1)
+            size_hint_x: .5
+        Button:
+            id: cur_product
+            text: 'PAYMENT INFORMATION'
+            font: 'BalsamiqSans-Regular'
+            font_size: sp(14)
+            background_normal: ''
+            color: (26/255,26/255,26/255, 1)
+            size_hint_x: .5
+    
+    BoxLayout:
+        id: infowindow
+        padding_top: dp(35
+        )
+        size_hint: None, None
+        #size: dp(1242), dp(95)
+        background_color: (0,0,0,0)
+        orientation: 'vertical'
+        canvas.before:
+            RoundedRectangle:
+                pos: self.pos
+                size: self.size
