@@ -35,6 +35,7 @@
             padding: dp(35.67), 0
             text: 'Checkout Counter > New Order'
             font: 'Lexend-Regular'
+            halign: 'left'
             font_size: sp(45)
             bold: False
             color: (43/255,52/255,103/255,1)
@@ -50,8 +51,8 @@
 
     BoxLayout:
         id: tab
+        padding: [0,0,0,35]
         size_hint_y: None
-        height: sp(64)
         canvas.before:
             Color:
                 rgba: (242/255,242/255,242/255, 1)
@@ -66,6 +67,7 @@
             background_color: 
             color: (26/255,26/255,26/255, 1)
             size_hint_x: .5
+            height: dp(64)
         Button:
             id: cur_product
             text: 'PAYMENT INFORMATION'
@@ -74,15 +76,17 @@
             background_normal: ''
             color: (26/255,26/255,26/255, 1)
             size_hint_x: .5
+            height: dp(64)
     
     BoxLayout:
         id: infowindow
-        padding_top: dp(35
-        )
-        size_hint: None, None
-        #size: dp(1242), dp(95)
-        background_color: (0,0,0,0)
+        size_hint_y: None
+        size_hint_x: None
+        width: main_win.width - dp(38)
+        pos_hint: {'center_x': 0.5}
         orientation: 'vertical'
+        height: dp(95)
+        
         canvas.before:
             RoundedRectangle:
                 pos: self.pos
