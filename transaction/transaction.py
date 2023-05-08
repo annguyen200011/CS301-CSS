@@ -84,7 +84,7 @@ class TransactionTable(MDBoxLayout):
     def update_price(self):
         price = 0
         for i in range(len(self.items)):
-            price += self.items[i][4]
+            price += int(self.items[i][4])
         #print(self.parent.children[0].children)
         self.parent.children[0].children[1].text = str(price)
     
@@ -96,7 +96,7 @@ class TransactionTable(MDBoxLayout):
             quantity = np.random.randint(1, 10)
             unit_price = np.random.randint(20, 100)
             item_price = quantity * unit_price
-            self.items.append([str(input_text), "Item" , quantity , unit_price, item_price])
+            self.items.append([str(input_text), "Item" , str(quantity) , str(unit_price), str(item_price)])
             self.data_tables.row_data = self.items
             self.children[2].children[2].text = ''
             self.update_price()
@@ -111,6 +111,7 @@ class TransactionTable(MDBoxLayout):
 
         self.items = new_item
         self.data_tables.row_data = self.items
+        self.update_price()
 
 
             
