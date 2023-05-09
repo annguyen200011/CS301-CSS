@@ -7,9 +7,12 @@ from kivymd.uix.button import MDRaisedButton
 from kivy.properties import ObjectProperty
 from kivy.core.window import Window
 from kivy.uix.screenmanager import ScreenManager, Screen
+from kivymd.uix.textfield import MDTextField
 from kivymd.uix.datatables import MDDataTable
 from kivy.metrics import dp
 from kivy.lang import Builder
+import numpy as np
+import datetime
 import sqlite3
 
 Builder.load_file('main.kv')
@@ -145,10 +148,137 @@ class UpdateItemScreen(Screen):
 
         self.parent.parent.show_inventory_screen()
 
+class TransactionTable(MDBoxLayout):
+    data_table = None
+    items = []
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        
+        _dp = 35
+        self.orientation = 'vertical'
+        button_box = MDBoxLayout(
+            pos_hint={"center_x": 0.5, "center_y": 0.9},
+            adaptive_size=True,
+            padding="24dp",
+            spacing="24dp",
+        )
+        input_search = MDTextField(size_hint_x = None, 
+                                   width = 500, 
+                                   hint_text = "Search Item",)
+        input_search.id = "search_item"
+        button_box.add_widget(input_search)
+        for button_text in ["Add Item", "Remove"]:
+            button_box.add_widget(
+                MDRaisedButton(
+                    text=button_text, on_release=self.on_button_press
+                )
+            )
+
+        self.data_tables = MDDataTable(
+            size_hint=(0.95, 0.95),
+            pos_hint={"center_x": 0.5, "center_y": 0.5},
+            use_pagination=True,
+            rows_num = 10,
+            pagination_menu_pos = 'top',
+            check=True,
+            column_data=[
+                ("Item ID", dp(_dp)),
+                ("Item Name", dp(_dp)),
+                ("Quantity", dp(_dp)),
+                ("Unit Item Price", dp(_dp)),
+                ("Final Item Price", dp(_dp)),
+            ],
+            row_data=self.items,
+        )
+
+        bottom = MDBoxLayout(orientation = 'vertical', size_hint_y = None, height = 120)
+        bottom.add_widget(Label(text = "Payment method ", size_hint_y = None, height = 40, color = (0,0,0,1)))
+        price_layout = MDBoxLayout(orientation = 'horizontal', size_hint_y = None, height = 40)
+        price_layout.add_widget(MDTextField(size_hint_x = None, 
+                                   width = 200, 
+                                   hint_text = "Money Gave"))
+        price_layout.add_widget(Label(text = "Money Return: ", size_hint_y = None, height = 40, color = (0,0,0,1)))
+        bottom.add_widget(price_layout)
+
+        self.add_widget(button_box)
+        self.add_widget(self.data_tables)
+        self.add_widget(bottom)
+
+
+    def on_button_press(self, instance_button: MDRaisedButton) -> None:
+        try:
+            {
+                "Add Item": self.add_item,
+                "Remove": self.remove_item,
+            }[instance_button.text]()
+        except KeyError:
+            pass
+    
+    def update_price(self):
+        #update price
+        price = 0
+        for i in range(len(self.items)):
+            price += int(self.items[i][4])
+        #print(self.parent.children[0].children)
+        self.parent.children[0].children[1].text = str(price) + ' $'
+    
+    def update_table(self):
+        #update table info
+        self.data_tables.row_data = self.items
+        self.update_price()
+    
+    
+    def add_item(self):
+        #print(self.children[2].children[2].text)
+        input_text = self.children[2].children[2].text
+        if input_text != '':
+            #check if item is already in the list
+            have_item = -1
+            for i in range(len(self.items)):
+                if input_text == self.items[i][0]:
+                    have_item = i
+                    
+            if have_item != -1:
+                new_quantity = int(self.items[have_item][2]) + 1
+                new_item = [self.items[have_item][0], self.items[have_item][1], 
+                            str(new_quantity), self.items[have_item][3], 
+                            str(new_quantity * int(self.items[have_item][3]))]
+                self.items.pop(have_item)
+                self.items.append(new_item)
+                self.children[2].children[2].text = ''
+                self.update_table()
+                return 
+            
+            #if item is not in the list
+            quantity = np.random.randint(1, 10)
+            unit_price = np.random.randint(20, 100)
+            item_price = quantity * unit_price
+            self.items.append([str(input_text), "Item" , str(quantity) , str(unit_price), str(item_price)])
+            self.data_tables.row_data = self.items
+            self.children[2].children[2].text = ''
+            self.update_price()
+
+
+    def remove_item(self):
+        #remove item from the list
+        checked = self.data_tables.get_row_checks()
+        print(checked)
+        new_item = []
+        for i in range(len(self.data_tables.row_data)):
+            if self.data_tables.row_data[i] not in checked:
+                new_item.append(self.data_tables.row_data[i])
+
+        self.items = new_item
+        self.data_tables.row_data = self.items
+        self.update_price()
+
+
+
 class TransactionScreen(Screen):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.add_widget(Label(text="Transaction Screen", color=(0,0,0,1)))
+        
+        
 
 class ReportScreen(Screen):
     def __init__(self, **kwargs):
@@ -347,6 +477,7 @@ class CashierHomeLayout(Screen):
 class LogInScreen(Screen):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
+        
 
     def validate_user(self):
         user_input = self.ids.username_field
