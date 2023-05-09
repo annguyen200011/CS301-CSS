@@ -1,0 +1,74 @@
+#:import C kivy.utils.get_color_from_hex
+
+<TransactionScreen>:
+    name: 'transaction'
+    MDBoxLayout:
+        orientation: "vertical"
+        size: root.width, root.height
+        canvas.before:
+            Color:
+                rgba: C('#BAD7E9')
+            Rectangle:
+                pos: self.pos
+                size: self.size
+        MDBoxLayout:
+            orientation: "horizontal"
+            size_hint_y: None
+            height: 104
+            Button:
+                text: '<'
+                size_hint_x: None
+                width: 104
+            Label:
+                text: 'Checkout Counter > New Order'
+                color: C('#2B3467')
+                font_size: 30
+                halign: 'center'
+                valign: 'center'
+            Button:
+                text: 'Profile'
+                size_hint_x: None
+                width: 104
+        # MDBoxLayout:
+        #     size_hint_y: None
+        #     height: 64
+        #     orientation: "horizontal"
+        #     Button:
+        #         text: 'ORDER INFORMATION'
+        #     Button:
+        #         text: 'PAYMENT INFORMATION'
+        MDBoxLayout:
+            orientation: "horizontal"
+            size_hint_y: None
+            height: 60
+            Label:
+                text: 'Time'
+                color: C('#2B3467')
+            Label:
+                text: 'Counter ID'
+                color: C('#2B3467')
+            Label:
+                text: 'Employee ID'
+                color: C('#2B3467')
+    
+                
+        TransactionTable: 
+
+
+        MDBoxLayout:
+            orientation: "horizontal"
+            size_hint_y: None
+            height: 98
+            Label:
+                color: C('#2B3467')
+                font_size:35
+                text: 'Total Price'
+            Label:
+                id: total_price
+                color: C('#2B3467')
+                font_size:35
+                text: '000$'
+            Button:
+                text: 'Confirm'
+
+<TransactionTable>:

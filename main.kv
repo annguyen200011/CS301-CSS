@@ -1,7 +1,4 @@
 #:import C kivy.utils.get_color_from_hex
-<<<<<<< Updated upstream
-#:import NoTransition kivy.uix.screenmanager.NoTransition
-=======
 
 <LogInScreen>:
     id: login_scrn
@@ -159,13 +156,7 @@
                 color: (0,0,0,1)
                 font_family: "Lexend"
 
-<TransactionScreen>:
-    canvas.before:
-        Color:
-            rgba: (1,1,1,1)
-        Rectangle:
-            size: self.size
-            pos: self.pos
+
 
 <ReportScreen>:
     canvas.before:
@@ -304,6 +295,60 @@
                     Rectangle:
                         size: self.size
                         pos: self.pos  
+
+<TransactionScreen>:
+    name: 'transaction'
+    MDBoxLayout:
+        id: transaction_screen
+        orientation: "vertical"
+        size: root.width, root.height
+        canvas.before:
+            Color:
+                rgba: C('#FFFFFF')
+            Rectangle:
+                pos: self.pos
+                size: self.size
+
+        MDBoxLayout:
+            id: top_info
+            orientation: "horizontal"
+            size_hint_y: None
+            height: 60
+            Label:
+                text: 'Time'
+                id: time
+                color: C('#2B3467')
+            Label:
+                text: 'Counter ID: A218'
+                color: C('#2B3467')
+            Label:
+                id: employee_id
+                text: 'Employee ID'
+                color: C('#2B3467')
+    
+                
+        TransactionTable: 
+
+
+        MDBoxLayout:
+            id: bottom_info
+            orientation: "horizontal"
+            size_hint_y: None
+            height: 98
+            Label:
+                color: C('#2B3467')
+                text: 'Total Price'
+                font_size: 30
+            Label:
+                id: total_price
+                color: C('#2B3467')
+                text: '000 $'
+                font_size: 30
+            MDRaisedButton:
+                text: 'Confirm'
+                font_size: 30
+
+
 
 <CashierHomeLayout>:
     MDBoxLayout:
@@ -537,75 +582,23 @@
     GridLayout:
         cols: 2
         rows: 2
-        size_hint: (0.5, 0.4)
+        size_hint: (0.8, 0.4)
         pos_hint: {'center_x': 0.5, 'center_y': 0.5}
         Label:
             text: 'Name'
             font_size: 22
             color: C('#2B3467')
-            text_size: self.width - 100, self.height
-            halign: 'right'
         TextInput:
             id: employee_name
             hint_text: 'Name'
-            background_color: 229/255, 229/255, 229/255, 1
-            background_normal: ''
-            multiline: False
-            focus: True
-            on_text_validate: employee_role.on_focus = True
         Label:
             text: 'Role'
             font_size: 22
             color: C('#2B3467')
-            text_size: self.width - 100, self.height
-            halign: 'right'
         TextInput:
             id: employee_role
             hint_text: 'Role'
-            background_color: 229/255, 229/255, 229/255, 1
-            background_normal: ''
-            multiline: False
-
->>>>>>> Stashed changes
 
 <MainLayout>:
-    ScreenManager:
-        transition: NoTransition()
-        Screen:
-            id: login_scrn
-            name: 'login'
-        Screen:
-            id: home_scrn_admin
-            name: 'home_admin'
-        Screen:
-            id: home_scrn_cashier
-            name: 'home_cashier'
-        Screen:
-            id: inventory_scrn 
-            name: 'inventory'
-            transition: NoTransition()
-        Screen:
-            id: transaction_scrn 
-            name: 'transaction'
-            transition: NoTransition()
-        Screen:
-            id: table_items_scrn
-            name: 'table_items'
-        Screen:
-            id: update_items_scrn
-            name: 'update_items'
-            transition: NoTransition()
-        Screen: 
-            id: report_scrn 
-            name: 'report'
-            transition: NoTransition()
-        Screen:
-            id: employee_scrn 
-            name: 'employee'
-            transition: NoTransition()
-        Screen:
-            id: inventory_scrn_cashier
-            name: 'inventory_cashier'
-        Screen:
-            id: transaction_scrn_cashier
-            name: 'transaction_cashier'
+    
+            
