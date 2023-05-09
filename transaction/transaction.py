@@ -81,6 +81,8 @@ class TransactionTable(MDBoxLayout):
         except KeyError:
             pass
     
+    
+
     def update_price(self):
         price = 0
         for i in range(len(self.items)):
@@ -89,10 +91,34 @@ class TransactionTable(MDBoxLayout):
         self.parent.children[0].children[1].text = str(price)
     
     
+    def update_table(self):
+        #update table info
+        self.data_tables.row_data = self.items
+        self.update_price()
+    
+    
     def add_item(self):
         #print(self.children[2].children[2].text)
         input_text = self.children[2].children[2].text
         if input_text != '':
+            #check if item is already in the list
+            have_item = -1
+            for i in range(len(self.items)):
+                if input_text == self.items[i][0]:
+                    have_item = i
+                    
+            if have_item != -1:
+                new_quantity = int(self.items[have_item][2]) + 1
+                new_item = [self.items[have_item][0], self.items[have_item][1], 
+                            str(new_quantity), self.items[have_item][3], 
+                            str(new_quantity * int(self.items[have_item][3]))]
+                self.items.pop(have_item)
+                self.items.append(new_item)
+                self.children[2].children[2].text = ''
+                self.update_table()
+                return 
+            
+            #if item is not in the list
             quantity = np.random.randint(1, 10)
             unit_price = np.random.randint(20, 100)
             item_price = quantity * unit_price
@@ -100,6 +126,7 @@ class TransactionTable(MDBoxLayout):
             self.data_tables.row_data = self.items
             self.children[2].children[2].text = ''
             self.update_price()
+
 
 
     def remove_item(self):
