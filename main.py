@@ -12,6 +12,7 @@ from kivymd.uix.datatables import MDDataTable
 from kivy.metrics import dp
 from kivy.lang import Builder
 import numpy as np
+import datetime
 import sqlite3
 
 Builder.load_file('main.kv')
@@ -152,6 +153,7 @@ class TransactionTable(MDBoxLayout):
     items = []
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
+        
         _dp = 35
         self.orientation = 'vertical'
         button_box = MDBoxLayout(
@@ -202,6 +204,7 @@ class TransactionTable(MDBoxLayout):
         self.add_widget(self.data_tables)
         self.add_widget(bottom)
 
+
     def on_button_press(self, instance_button: MDRaisedButton) -> None:
         try:
             {
@@ -212,17 +215,41 @@ class TransactionTable(MDBoxLayout):
             pass
     
     def update_price(self):
+        #update price
         price = 0
         for i in range(len(self.items)):
             price += int(self.items[i][4])
         #print(self.parent.children[0].children)
         self.parent.children[0].children[1].text = str(price) + ' $'
     
+    def update_table(self):
+        #update table info
+        self.data_tables.row_data = self.items
+        self.update_price()
+    
     
     def add_item(self):
         #print(self.children[2].children[2].text)
         input_text = self.children[2].children[2].text
         if input_text != '':
+            #check if item is already in the list
+            have_item = -1
+            for i in range(len(self.items)):
+                if input_text == self.items[i][0]:
+                    have_item = i
+                    
+            if have_item != -1:
+                new_quantity = int(self.items[have_item][2]) + 1
+                new_item = [self.items[have_item][0], self.items[have_item][1], 
+                            str(new_quantity), self.items[have_item][3], 
+                            str(new_quantity * int(self.items[have_item][3]))]
+                self.items.pop(have_item)
+                self.items.append(new_item)
+                self.children[2].children[2].text = ''
+                self.update_table()
+                return 
+            
+            #if item is not in the list
             quantity = np.random.randint(1, 10)
             unit_price = np.random.randint(20, 100)
             item_price = quantity * unit_price
@@ -233,6 +260,7 @@ class TransactionTable(MDBoxLayout):
 
 
     def remove_item(self):
+        #remove item from the list
         checked = self.data_tables.get_row_checks()
         print(checked)
         new_item = []
@@ -245,15 +273,12 @@ class TransactionTable(MDBoxLayout):
         self.update_price()
 
 
-            
-
-
-
 
 class TransactionScreen(Screen):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        #self.add_widget(Label(text="Transaction Screen", color=(0,0,0,1)))
+        
+        
 
 class ReportScreen(Screen):
     def __init__(self, **kwargs):
@@ -452,6 +477,7 @@ class CashierHomeLayout(Screen):
 class LogInScreen(Screen):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
+        
 
     def validate_user(self):
         user_input = self.ids.username_field

@@ -299,6 +299,7 @@
 <TransactionScreen>:
     name: 'transaction'
     MDBoxLayout:
+        id: transaction_screen
         orientation: "vertical"
         size: root.width, root.height
         canvas.before:
@@ -309,16 +310,19 @@
                 size: self.size
 
         MDBoxLayout:
+            id: top_info
             orientation: "horizontal"
             size_hint_y: None
             height: 60
             Label:
                 text: 'Time'
+                id: time
                 color: C('#2B3467')
             Label:
-                text: 'Counter ID'
+                text: 'Counter ID: A218'
                 color: C('#2B3467')
             Label:
+                id: employee_id
                 text: 'Employee ID'
                 color: C('#2B3467')
     
@@ -327,6 +331,7 @@
 
 
         MDBoxLayout:
+            id: bottom_info
             orientation: "horizontal"
             size_hint_y: None
             height: 98
@@ -339,8 +344,10 @@
                 color: C('#2B3467')
                 text: '000 $'
                 font_size: 30
-            Button:
+            MDRaisedButton:
                 text: 'Confirm'
+                font_size: 30
+
 
 
 <CashierHomeLayout>:
