@@ -58,6 +58,7 @@ class InventoryScreen(Screen):
 
         # Create a table
         c.execute("""CREATE TABLE if not exists item (
+            product_id integer,
             category text,
             product_name text,
             quantity_left integer,
@@ -70,7 +71,7 @@ class InventoryScreen(Screen):
         conn.commit()
         conn.close()
 
-        _dp = 35
+        _dp = 25
         self.data_tables = MDDataTable(
             pos_hint={"center_y": 0.45, "center_x": 0.5},
             size_hint=(0.95, 0.8),
@@ -78,6 +79,7 @@ class InventoryScreen(Screen):
             rows_num = 10,
             pagination_menu_pos = 'top',
             column_data=[
+                ("ID", dp(_dp)),
                 ("Category", dp(_dp)),
                 ("Product Name", dp(_dp)),
                 ("Quantity Left", dp(_dp)),
@@ -164,8 +166,12 @@ class UpdateItemScreen(Screen):
 
             c = conn.cursor()
 
-            c.execute("INSERT INTO item VALUES (:category, :name, :quantity, :price, :status)",
+            c.execute("SELECT * FROM item")
+            items = c.fetchall()
+
+            c.execute("INSERT INTO item VALUES (:product_id, :category, :name, :quantity, :price, :status)",
                     {
+                        'product_id': len(items) + 1,
                         'category': self.ids.product_category.text,
                         'name': self.ids.product_name.text,
                         'quantity': self.ids.product_quantity.text,
