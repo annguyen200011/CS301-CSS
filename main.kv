@@ -497,12 +497,13 @@
             halign: 'right'
         TextInput:
             id: product_category
+            text_size: self.width, self.height
             hint_text: 'Product Category'
             background_color: 229/255, 229/255, 229/255, 1
             background_normal: ''
             multiline: False
             focus: True
-            on_text_validate: product_name.on_focus = True
+            on_text_validate: product_name.focus = True
         Label:
             text: 'Product Name'
             font_size: 22
@@ -512,10 +513,11 @@
         TextInput:
             id: product_name
             hint_text: 'Product Name'
+            text_size: self.width, self.height
             background_color: 229/255, 229/255, 229/255, 1
             background_normal: ''
             multiline: False
-            on_text_validate: product_price.on_focus = True
+            on_text_validate: product_price.focus = True
         Label:
             text: 'Product Price'
             font_size: 22
@@ -528,7 +530,7 @@
             background_color: 229/255, 229/255, 229/255, 1
             background_normal: ''
             multiline: False
-            on_text_validate: product_quantity.on_focus = True
+            on_text_validate: product_quantity.focus = True
         Label:
             text: 'Product Quantity'
             font_size: 22
@@ -582,22 +584,36 @@
     GridLayout:
         cols: 2
         rows: 2
-        size_hint: (0.8, 0.4)
+        size_hint: (0.5, 0.5)
         pos_hint: {'center_x': 0.5, 'center_y': 0.5}
         Label:
             text: 'Name'
             font_size: 22
             color: C('#2B3467')
+            text_size: self.width - 100, self.height
+            halign: 'right'
         TextInput:
-            id: employee_name
-            hint_text: 'Name'
+            id: product_category
+            text_size: self.width, self.height
+            hint_text: 'Employee Name'
+            background_color: 229/255, 229/255, 229/255, 1
+            background_normal: ''
+            multiline: False
+            focus: True
+            on_text_validate: employee_role.focus = True
         Label:
             text: 'Role'
             font_size: 22
             color: C('#2B3467')
+            text_size: self.width - 100, self.height
+            halign: 'right'
         TextInput:
-            id: employee_role
-            hint_text: 'Role'
+            id: product_name
+            hint_text: 'Employee Role'
+            text_size: self.width, self.height
+            background_color: 229/255, 229/255, 229/255, 1
+            background_normal: ''
+            multiline: False
 
 <MainLayout>:
     
