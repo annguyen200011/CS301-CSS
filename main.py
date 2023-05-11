@@ -20,16 +20,18 @@ Window.size = (1280,832)
 
 class InventoryScreen(Screen):
     data_tables = None
+    items = []
+
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         button_box = MDBoxLayout(
-            pos_hint={"center_x": 0.8, "center_y": 0.9},
+            pos_hint={"center_x": 0.8, "center_y": 0.905},
             adaptive_size=True,
             padding="24dp",
             spacing="24dp",
         )
 
-        for button_text in ["Search and Filter", "Update"]:
+        for button_text in ["Delete Selected Item(s)", "Create New"]:
             button_box.add_widget(
                 MDRaisedButton(
                     text=button_text, on_release=self.on_button_press
@@ -37,17 +39,26 @@ class InventoryScreen(Screen):
             )
 
         # Add the inventory screen
+
+        self.search_bar_inventory = MDTextField(
+            id = "search_bar_inventory",
+            on_text_validate = self.search,
+            pos_hint={"center_x": 0.33, "center_y": 0.905},
+            size = {580,20},
+            font_size = 15,
+            padding="24dp",
+            hint_text="Search by product Category/Name/Status",
+            # fill_color = {229/255, 229/255, 229/255, 229/255}
+        )
         
 
         # Connect sqlite3
-        #create database or connect to one
         conn = sqlite3.connect('inventory_db.db')
-
-        # crate a cursor
         c = conn.cursor()
 
         # Create a table
         c.execute("""CREATE TABLE if not exists item (
+            product_id integer,
             category text,
             product_name text,
             quantity_left integer,
@@ -55,12 +66,12 @@ class InventoryScreen(Screen):
             status text)
             """)
         c.execute("SELECT * FROM item")
-        items = c.fetchall()
+        self.items = c.fetchall()
         
         conn.commit()
         conn.close()
 
-        _dp = 35
+        _dp = 25
         self.data_tables = MDDataTable(
             pos_hint={"center_y": 0.45, "center_x": 0.5},
             size_hint=(0.95, 0.8),
@@ -68,25 +79,28 @@ class InventoryScreen(Screen):
             rows_num = 10,
             pagination_menu_pos = 'top',
             column_data=[
+                ("ID", dp(_dp)),
                 ("Category", dp(_dp)),
                 ("Product Name", dp(_dp)),
                 ("Quantity Left", dp(_dp)),
                 ("Unit Price", dp(_dp)),
                 ("Status", dp(_dp)),
             ],
-            row_data=items,
+            # row_data=sorted(self.items, key=lambda x: x[2]),
+            row_data = self.items,
+            check = True,
         )
 
         self.add_widget(button_box)
         self.add_widget(self.data_tables)
-
+        self.add_widget(self.search_bar_inventory)
     
     def on_button_press(self, instance_button: MDRaisedButton) -> None:
         '''Called when a control button is clicked.'''
 
         try:
-            {
-                "Update": self.parent.parent.show_update_screen,
+            {   "Delete Selected Item(s)": self.remove_item,
+                "Create New": self.parent.parent.show_update_screen,
 
             }[instance_button.text]()
         except KeyError:
@@ -100,11 +114,44 @@ class InventoryScreen(Screen):
         c = conn.cursor()
 
         c.execute("SELECT * FROM item")
-        items = c.fetchall()
-        self.data_tables.row_data = items
+        self.items = c.fetchall()
+        
+        self.data_tables.row_data = self.items
+        self.data_tables.row_data = sorted(self.items, key=lambda x: x[2])
         
         conn.commit()
         conn.close()
+
+    def search(self, instance):
+        conn = sqlite3.connect('inventory_db.db')
+
+        # crate a cursor
+        c = conn.cursor()
+
+        c.execute('''SELECT * FROM item WHERE product_name LIKE ? or category LIKE ? or status LIKE ?''', 
+                  ['%' + self.search_bar_inventory.text + '%', '%' + self.search_bar_inventory.text + '%', '%' + self.search_bar_inventory.text + '%'])
+        filters = c.fetchall()
+        
+        self.data_tables.row_data = filters
+        self.data_tables.row_data = sorted(filters, key=lambda x: x[2])
+        
+        conn.commit()
+        conn.close()
+    
+    def remove_item(self):
+        # remove item from the list
+        checked = self.data_tables.get_row_checks()
+        print(checked)
+
+        conn = sqlite3.connect('inventory_db.db')
+        c = conn.cursor()
+        for item in checked:
+            c.execute('DELETE FROM item WHERE product_name = ?', (item[1],))
+
+        conn.commit()
+        conn.close()
+
+        self.update_items()
         
 class UpdateItemScreen(Screen):
 
@@ -119,8 +166,12 @@ class UpdateItemScreen(Screen):
 
             c = conn.cursor()
 
-            c.execute("INSERT INTO item VALUES (:category, :name, :quantity, :price, :status)",
+            c.execute("SELECT * FROM item")
+            items = c.fetchall()
+
+            c.execute("INSERT INTO item VALUES (:product_id, :category, :name, :quantity, :price, :status)",
                     {
+                        'product_id': len(items) + 1,
                         'category': self.ids.product_category.text,
                         'name': self.ids.product_name.text,
                         'quantity': self.ids.product_quantity.text,
@@ -162,10 +213,17 @@ class TransactionTable(MDBoxLayout):
             padding="24dp",
             spacing="24dp",
         )
-        input_search = MDTextField(size_hint_x = None, 
-                                   width = 500, 
-                                   hint_text = "Search Item",)
-        input_search.id = "search_item"
+        input_search = MDTextField(
+            id = "search_item",
+            # on_text_validate = self.search,
+            pos_hint={"center_x": 0.5, "center_y": 0.9},
+            size = {600,20},
+            font_size = 15,
+            padding="24dp",
+            hint_text="Search by product Category/Name/Status",
+            # fill_color = {229/255, 229/255, 229/255, 229/255}
+        )
+
         button_box.add_widget(input_search)
         for button_text in ["Add Item", "Remove"]:
             button_box.add_widget(
@@ -304,6 +362,17 @@ class EmployeeScreen(Screen):
             )
 
         # Add the inventory screen
+
+        self.search_bar_employee = MDTextField(
+            id = "search_bar_employee",
+            on_text_validate = self.search,
+            pos_hint={"center_x": 0.34, "center_y": 0.905},
+            size = {600,20},
+            font_size = 15,
+            padding="24dp",
+            hint_text="Search by Name/Role/EmployeeID",
+            # fill_color = {229/255, 229/255, 229/255, 229/255}
+        )
         
 
         # Connect sqlite3
@@ -321,11 +390,12 @@ class EmployeeScreen(Screen):
             """)
         c.execute("SELECT * FROM employees")
         employees = c.fetchall()
+        employees = sorted(employees, key=lambda x: x[1])
         
         conn.commit()
         conn.close()
 
-        _dp = 30
+        _dp = 40
         self.data_tables = MDDataTable(
             pos_hint={"center_y": 0.45, "center_x": 0.5},
             size_hint=(0.6, 0.6),
@@ -338,10 +408,12 @@ class EmployeeScreen(Screen):
                 ("Role", dp(_dp))
             ],
             row_data=employees,
+            check = True,
         )
 
         self.add_widget(button_box)
         self.add_widget(self.data_tables)
+        self.add_widget(self.search_bar_employee)
 
     
     def on_button_press(self, instance_button: MDRaisedButton) -> None:
@@ -364,7 +436,23 @@ class EmployeeScreen(Screen):
 
         c.execute("SELECT * FROM employees")
         items = c.fetchall()
+        items = sorted(items, key=lambda x: x[1])
         self.data_tables.row_data = items
+        
+        conn.commit()
+        conn.close()
+
+    def search(self, instance):
+        conn = sqlite3.connect('employee_db.db')
+
+        # crate a cursor
+        c = conn.cursor()
+
+        c.execute('''SELECT * FROM employees WHERE name LIKE ? or role LIKE ? or employeeID LIKE ?''', 
+                  ['%' + self.search_bar_employee.text + '%','%' + self.search_bar_employee.text + '%', '%' + self.search_bar_employee.text + '%'])
+        filters = c.fetchall()
+        filters = sorted(filters, key=lambda x: x[1])
+        self.data_tables.row_data = filters
         
         conn.commit()
         conn.close()
