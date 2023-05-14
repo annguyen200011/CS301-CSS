@@ -1,4 +1,38 @@
 #:import C kivy.utils.get_color_from_hex
+#:import Factory kivy.factory.Factory
+
+<ConfirmPopup>:
+    auto_dismiss: False
+    size_hint: 0.7, 0.6
+    MDBoxLayout:
+        orientation: 'vertical'
+        canvas.before:
+            Color:
+                rgba: C('#FFFFFF')
+            Rectangle:
+                pos: self.pos
+                size: self.size
+        MDIcon:
+            icon: "alert-circle"
+            pos_hint: {"center_x": .5, "center_y": .5}
+            padding_top: dp(39)
+
+        MDLabel:
+            text: 'Are you sure you want to confirm this transaction?'
+            halign: 'center'
+        MDBoxLayout:
+            orientation: 'horizontal'
+            padding_left: dp(45)
+            Button:
+                id: window_return 
+                size_hint: 0.4, 0.2
+                text: "No, Go back"
+                on_release: root.dismiss()
+            Button:
+                id: save_transaction
+                size_hint: 0.4, 0.2
+                text: "Yes"
+                on_release: root.reset_and_dismiss()
 
 <TransactionScreen>:
     name: 'transaction'
@@ -41,11 +75,7 @@
             orientation: "horizontal"
             size_hint_y: None
             height: 60
-            Label:
-                text: 'Time'
-                color: C('#2B3467')
-            Label:
-                text: 'Counter ID'
+            TimeLabel:
                 color: C('#2B3467')
             Label:
                 text: 'Employee ID'
@@ -70,5 +100,6 @@
                 text: '000$'
             Button:
                 text: 'Confirm'
+                on_release: Factory.ConfirmPopup().open()
 
 <TransactionTable>:

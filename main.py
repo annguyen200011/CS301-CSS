@@ -11,6 +11,7 @@ from kivymd.uix.textfield import MDTextField
 from kivymd.uix.datatables import MDDataTable
 from kivy.metrics import dp
 from kivy.lang import Builder
+from kivy.uix.popup import Popup
 import numpy as np
 import datetime
 import sqlite3
@@ -272,7 +273,17 @@ class TransactionTable(MDBoxLayout):
         self.data_tables.row_data = self.items
         self.update_price()
 
-
+    #create popup window for the confirm button
+class ConfirmPopup(Popup):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        
+    #resets the data table and saves transaction info into a .txt file
+    def reset_and_dismiss(self):
+        self.dismiss()
+        with open('transaction.txt', 'a', encoding='utf-8') as file:
+            file.write(str(TransactionTable().data_tables.row_data)+"\n")
+        TransactionTable().reset() #Error: 'NoneType' object has no attribute children
 
 class TransactionScreen(Screen):
     def __init__(self, **kwargs):
