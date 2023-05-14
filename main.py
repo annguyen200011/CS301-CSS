@@ -12,9 +12,10 @@ from kivymd.uix.datatables import MDDataTable
 from kivy.metrics import dp
 from kivy.lang import Builder
 from kivy.uix.popup import Popup
+from datetime import datetime
 import numpy as np
-import datetime
 import sqlite3
+
 
 Builder.load_file('main.kv')
 Window.size = (1280,832)
@@ -284,6 +285,11 @@ class ConfirmPopup(Popup):
         with open('transaction.txt', 'a', encoding='utf-8') as file:
             file.write(str(TransactionTable().data_tables.row_data)+"\n")
         TransactionTable().reset() #Error: 'NoneType' object has no attribute children
+
+class TimeLabel(Label):
+    def __init__(self, **kwargs):
+        super(TimeLabel, self).__init__(**kwargs)     
+        self.text = "Time: "+ datetime.now().strftime(' %H:%M:%S - %a %d %b')  
 
 class TransactionScreen(Screen):
     def __init__(self, **kwargs):
