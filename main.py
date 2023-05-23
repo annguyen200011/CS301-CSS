@@ -11,9 +11,11 @@ from kivymd.uix.textfield import MDTextField
 from kivymd.uix.datatables import MDDataTable
 from kivy.metrics import dp
 from kivy.lang import Builder
+from kivy.uix.popup import Popup
+from datetime import datetime
 import numpy as np
-import datetime
 import sqlite3
+
 
 Builder.load_file('main.kv')
 Window.size = (1280,832)
@@ -330,7 +332,27 @@ class TransactionTable(MDBoxLayout):
         self.data_tables.row_data = self.items
         self.update_price()
 
+    def reset(self):
+        self.items = []
+        if not self.parent:
+            return TransactionTable
+        self.update_price()
 
+    #create popup window for the confirm button
+class ConfirmPopup(Popup):
+    pass
+        
+    #resets the data table and saves transaction info into a .txt file
+    def reset_and_dismiss(self):
+        self.dismiss()
+        with open('transaction.txt', 'a', encoding='utf-8') as file:
+            file.write(str(TransactionTable().data_tables.row_data)+"\n")
+        TransactionTable().reset() #Error: 'NoneType' object has no attribute children
+
+class TimeLabel(Label):
+    def __init__(self, **kwargs):
+        super(TimeLabel, self).__init__(**kwargs)     
+        self.text = "Time: "+ datetime.now().strftime(' %H:%M:%S - %a %d %b')  
 
 class TransactionScreen(Screen):
     def __init__(self, **kwargs):
@@ -585,6 +607,8 @@ class LogInScreen(Screen):
                 self.parent.parent.show_cashier_screen()
             elif (user == 'admin' and pwd is not 'admin') or (user == 'cashier' and pwd is not 'cashier'):
                 info.text = '[color=#FF0000] Invalid username and/or password [/color]'
+            elif (user is not 'admin') and (user is not 'cashier'):
+                info.text = '[color=#FF0000] Invalid username and/or password [/color]'
 
 class MainLayout(MDFloatLayout):
     screen_manager = ObjectProperty(None)
@@ -615,7 +639,7 @@ class MainLayout(MDFloatLayout):
 
         
 
-class MainApp(MDApp):
+class POSApp(MDApp):
     def build(self):
         Window.size=(1280, 832)
         return MainLayout()
@@ -623,4 +647,4 @@ class MainApp(MDApp):
 
 
 if __name__ == '__main__':
-    MainApp().run()
+    POSApp().run()

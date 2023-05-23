@@ -13,6 +13,8 @@ from kivy.metrics import dp
 from kivy.lang import Builder
 import numpy as np
 import sqlite3
+from kivy.uix.popup import Popup
+from datetime import datetime
 
 Builder.load_file('transaction.kv')
 Window.size = (1280,832)
@@ -42,7 +44,6 @@ class TransactionTable(MDBoxLayout):
                     text=button_text, on_release=self.on_button_press
                 )
             )
-
         self.data_tables = MDDataTable(
             size_hint=(1, 1),
             use_pagination=True,
@@ -62,9 +63,12 @@ class TransactionTable(MDBoxLayout):
         bottom = MDBoxLayout(orientation = 'vertical', size_hint_y = None, height = 120)
         bottom.add_widget(Label(text = "Payment method ", size_hint_y = None, height = 40, color = (0,0,0,1)))
         price_layout = MDBoxLayout(orientation = 'horizontal', size_hint_y = None, height = 40)
-        price_layout.add_widget(MDTextField(size_hint_x = None, 
+        price_layout.id = "cost_info"
+        price_layout.add_widget(MDTextField(id="old",size_hint_x = None,         
                                    width = 200, 
-                                   hint_text = "Money Gave"))
+                                   hint_text = "Money Gave",
+                                   multiline = False,
+                                   ))
         price_layout.add_widget(Label(text = "Money Return: ", size_hint_y = None, height = 40, color = (0,0,0,1)))
         bottom.add_widget(price_layout)
 
@@ -80,17 +84,21 @@ class TransactionTable(MDBoxLayout):
             }[instance_button.text]()
         except KeyError:
             pass
-    
-    
 
     def update_price(self):
         price = 0
         for i in range(len(self.items)):
             price += int(self.items[i][4])
         #print(self.parent.children[0].children)
+        if not self.parent:
+            return TransactionTable
         self.parent.children[0].children[1].text = str(price)
-    
-    
+
+    #def calculate_return(self):
+        #return_cash = self.root.id.old.text - price
+        #global final 
+        #final = str(return_cash)
+
     def update_table(self):
         #update table info
         self.data_tables.row_data = self.items
@@ -127,7 +135,9 @@ class TransactionTable(MDBoxLayout):
             self.children[2].children[2].text = ''
             self.update_price()
 
-
+    def reset(self):
+        self.items = []
+        self.update_price()
 
     def remove_item(self):
         checked = self.data_tables.get_row_checks()
@@ -140,20 +150,33 @@ class TransactionTable(MDBoxLayout):
         self.data_tables.row_data = self.items
         self.update_price()
 
+    #create popup window for the confirm button
+class ConfirmPopup(Popup):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        
+    #resets the data table and saves transaction info into a .txt file
+    def reset_and_dismiss(self):
+        self.dismiss()
+        with open('transaction.txt', 'a', encoding='utf-8') as file:
+            file.write(str(TransactionTable().data_tables.row_data)+"\n")
+        TransactionTable().reset() #Error: 'NoneType' object has no attribute children
 
-            
-
+    #Show time in the display window
+class TimeLabel(Label):
+    def __init__(self, **kwargs):
+        super(TimeLabel, self).__init__(**kwargs)     
+        self.text = "Time: "+ datetime.now().strftime(' %H:%M:%S - %a %d %b')   
 
 class TransactionScreen(Screen):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        #self.add_widget(Label(text="Transaction Screen", color=(0,0,0,1)))
 
-class MainApp(MDApp):
+class POSApp(MDApp):
     def build(self):
         Window.size=(1280, 832)
         return TransactionScreen()
         
 
 if __name__ == '__main__':
-    MainApp().run()
+    POSApp().run()
