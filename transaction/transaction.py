@@ -90,6 +90,8 @@ class TransactionTable(MDBoxLayout):
         for i in range(len(self.items)):
             price += int(self.items[i][4])
         #print(self.parent.children[0].children)
+        if not self.parent:
+            return TransactionTable
         self.parent.children[0].children[1].text = str(price)
 
     #def calculate_return(self):
@@ -170,11 +172,11 @@ class TransactionScreen(Screen):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-class MainApp(MDApp):
+class POSApp(MDApp):
     def build(self):
         Window.size=(1280, 832)
         return TransactionScreen()
         
 
 if __name__ == '__main__':
-    MainApp().run()
+    POSApp().run()
