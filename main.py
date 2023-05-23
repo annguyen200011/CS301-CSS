@@ -519,6 +519,8 @@ class LogInScreen(Screen):
                 self.parent.parent.show_cashier_screen()
             elif (user == 'admin' and pwd is not 'admin') or (user == 'cashier' and pwd is not 'cashier'):
                 info.text = '[color=#FF0000] Invalid username and/or password [/color]'
+            elif (user is not 'admin') and (user is not 'cashier'):
+                info.text = '[color=#FF0000] Invalid username and/or password [/color]'
 
 class MainLayout(MDFloatLayout):
     screen_manager = ObjectProperty(None)
