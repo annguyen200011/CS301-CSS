@@ -337,6 +337,7 @@ class TransactionTable(MDBoxLayout):
         if not self.parent:
             return TransactionTable
         self.update_price()
+        self.data_tables.row_data = self.items
 
     #create popup window for the confirm button
 class ConfirmPopup(Popup):
@@ -347,7 +348,7 @@ class ConfirmPopup(Popup):
         self.dismiss()
         with open('transaction.txt', 'a', encoding='utf-8') as file:
             file.write(str(TransactionTable().data_tables.row_data)+"\n")
-        TransactionTable().reset() #Error: 'NoneType' object has no attribute children
+        self.parent.children[1].children[0].children[0].children[0].children[0].children[0].children[0].children[0].children[0].children[1].reset()
 
 class TimeLabel(Label):
     def __init__(self, **kwargs):
