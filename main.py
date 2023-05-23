@@ -274,10 +274,15 @@ class TransactionTable(MDBoxLayout):
         self.data_tables.row_data = self.items
         self.update_price()
 
+    def reset(self):
+        self.items = []
+        if not self.parent:
+            return TransactionTable
+        self.update_price()
+
     #create popup window for the confirm button
 class ConfirmPopup(Popup):
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
+    pass
         
     #resets the data table and saves transaction info into a .txt file
     def reset_and_dismiss(self):
@@ -544,7 +549,7 @@ class MainLayout(MDFloatLayout):
 
         
 
-class MainApp(MDApp):
+class POSApp(MDApp):
     def build(self):
         Window.size=(1280, 832)
         return MainLayout()
@@ -552,4 +557,4 @@ class MainApp(MDApp):
 
 
 if __name__ == '__main__':
-    MainApp().run()
+    POSApp().run()
